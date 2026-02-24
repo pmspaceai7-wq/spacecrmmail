@@ -39,6 +39,7 @@ export const INDUSTRIES: Industry[] = [
       "Automate property inquiries, follow-ups, and client scheduling. Close more deals with AI-driven lead nurturing.",
     icon: Building2,
     iconName: "Building2",
+    heroImage: "/images/real-estate.webp",
     features: [
       {
         title: "Automated Property Inquiries",
@@ -81,6 +82,14 @@ export const INDUSTRIES: Industry[] = [
         readTime: "6 min read",
         slug: "whatsapp-marketing-realtors",
       },
+      {
+        title: "AI-Powered Property Valuation Tools",
+        excerpt:
+          "How AI is revolutionizing property appraisals and helping agents provide instant valuations.",
+        date: "Nov 15, 2025",
+        readTime: "5 min read",
+        slug: "ai-powered-property-valuation",
+      },
     ],
   },
   {
@@ -90,6 +99,7 @@ export const INDUSTRIES: Industry[] = [
       "Scale your user acquisition and onboarding. Reduce churn with timely, automated customer success outreach.",
     icon: Cloud,
     iconName: "Cloud",
+    heroImage: "/images/saas.webp",
     features: [
       {
         title: "User Onboarding Flows",
@@ -124,6 +134,14 @@ export const INDUSTRIES: Industry[] = [
         readTime: "5 min read",
         slug: "onboarding-best-practices",
       },
+      {
+        title: "Advanced Churn Prediction Models",
+        excerpt:
+          "Using machine learning to predict and prevent customer churn before it happens.",
+        date: "Nov 10, 2025",
+        readTime: "6 min read",
+        slug: "advanced-churn-prediction",
+      },
     ],
   },
   {
@@ -133,6 +151,7 @@ export const INDUSTRIES: Industry[] = [
       "Recover abandoned carts, drive repeat purchases, and build brand loyalty with personalized omnichannel campaigns.",
     icon: ShoppingCart,
     iconName: "ShoppingCart",
+    heroImage: "/images/ecommerce.webp",
     features: [
       {
         title: "Abandoned Cart Recovery",
@@ -167,6 +186,14 @@ export const INDUSTRIES: Industry[] = [
         readTime: "4 min read",
         slug: "boosting-ltv-ecommerce",
       },
+      {
+        title: "Personalized Shopping Experiences",
+        excerpt:
+          "Creating tailored shopping journeys that boost conversion rates and customer loyalty.",
+        date: "Nov 05, 2025",
+        readTime: "4 min read",
+        slug: "personalized-shopping-experiences",
+      },
     ],
   },
   {
@@ -176,6 +203,7 @@ export const INDUSTRIES: Industry[] = [
       "Streamline patient communication with secure appointment reminders, follow-ups, and health tips.",
     icon: Stethoscope,
     iconName: "Stethoscope",
+    heroImage: "/images/healthcare.webp",
     features: [
       {
         title: "Appointment Reminders",
@@ -202,6 +230,14 @@ export const INDUSTRIES: Industry[] = [
         readTime: "8 min read",
         slug: "hipaa-compliant-automation",
       },
+      {
+        title: "Telemedicine Integration in CRM",
+        excerpt:
+          "Streamlining patient communication through integrated telemedicine platforms.",
+        date: "Nov 01, 2025",
+        readTime: "7 min read",
+        slug: "telemedicine-integration-crm",
+      },
     ],
   },
   {
@@ -211,6 +247,7 @@ export const INDUSTRIES: Industry[] = [
       "Build trust and manage client relationships securely. Automate updates, reports, and meeting scheduling.",
     icon: Landmark,
     iconName: "Landmark",
+    heroImage: "/images/finance.webp",
     features: [
       {
         title: "Market Update Briefs",
@@ -237,6 +274,14 @@ export const INDUSTRIES: Industry[] = [
         readTime: "5 min read",
         slug: "automation-wealth-management",
       },
+      {
+        title: "Regulatory Compliance Automation",
+        excerpt:
+          "Automating compliance checks to reduce risk and ensure regulatory adherence.",
+        date: "Oct 30, 2025",
+        readTime: "5 min read",
+        slug: "regulatory-compliance-automation",
+      },
     ],
   },
   {
@@ -246,6 +291,7 @@ export const INDUSTRIES: Industry[] = [
       "Improve student enrollment and engagement. Automate admissions communication and alumni relations.",
     icon: GraduationCap,
     iconName: "GraduationCap",
+    heroImage: "/images/education.webp",
     features: [
       {
         title: "Admissions Pipeline",
@@ -271,6 +317,14 @@ export const INDUSTRIES: Industry[] = [
         date: "Sep 18, 2025",
         readTime: "6 min read",
         slug: "digital-transformation-education",
+      },
+      {
+        title: "Student Retention Strategies",
+        excerpt:
+          "Using CRM to improve student engagement and reduce dropout rates.",
+        date: "Oct 25, 2025",
+        readTime: "6 min read",
+        slug: "student-retention-strategies",
       },
     ],
   },
