@@ -2,11 +2,8 @@
 
 import { motion } from "framer-motion";
 import {
-  Check,
-  Sparkles,
   Calendar,
   ArrowRight,
-  Zap,
   Mail,
   Linkedin,
   MessageCircle,
@@ -14,6 +11,7 @@ import {
   BarChart3,
   Inbox,
   Bot,
+  Zap,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -30,101 +28,110 @@ const features = [
 
 export default function Pricing() {
   return (
-    <section
-      id="pricing"
-      className="section-padding bg-gradient-to-b from-slate-50/50 to-white"
-    >
-      <div className="container-custom">
-        {/* Section Header */}
+    <section className="relative bg-white border-b border-gray-200 overflow-hidden">
+      
+      {/* Decorative grid overlay — SAME AS HERO */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.03]"
+        style={{
+          backgroundImage:
+            "linear-gradient(to right, #000 1px, transparent 1px), linear-gradient(to bottom, #000 1px, transparent 1px)",
+          backgroundSize: "80px 80px",
+        }}
+      />
+
+      <div className="max-w-6xl mx-auto px-6 lg:px-12 py-24 lg:py-32 relative">
+
+        {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 28 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="text-center max-w-3xl mx-auto mb-10 md:mb-16"
+          transition={{ duration: 0.6 }}
+          className="max-w-2xl mb-16"
         >
-          <span className="inline-block px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-primary-50 text-primary-700 text-xs sm:text-sm font-semibold mb-4">
+          <p className="text-xs font-mono tracking-[0.2em] uppercase text-gray-400 mb-6">
             Features & Pricing
-          </span>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 md:mb-6 px-4">
-            Everything you need to{" "}
-            <span className="gradient-text">scale your outreach</span>
+          </p>
+
+          <h2 className="text-4xl md:text-6xl font-thin font-black tracking-tight leading-[0.95] text-gray-900 mb-6">
+            Everything you need
+            <br />
+            to scale outreach.
           </h2>
-          <p className="text-base sm:text-lg text-gray-600 px-4">
-            One powerful platform with all the features you need. Custom pricing
-            tailored to your business needs.
+
+          <p className="text-gray-500 max-w-md leading-relaxed">
+            One platform for Email, LinkedIn, and WhatsApp — unified, AI-powered,
+            and built to scale with your revenue team.
           </p>
         </motion.div>
 
-        {/* Single Feature Card */}
+        {/* Feature Grid — HERO CARD STYLE */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 28 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="max-w-4xl mx-auto"
+          transition={{ duration: 0.6 }}
+          className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-16"
         >
-          <div className="relative bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12 shadow-2xl shadow-primary-500/10 border border-gray-100 overflow-hidden">
-            {/* Background Gradient */}
-            <div className="absolute top-0 right-0 w-64 h-64 sm:w-96 sm:h-96 bg-gradient-to-br from-primary-100/50 to-violet-100/50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+          {features.map((feature) => (
+            <div
+              key={feature.text}
+              className="border border-gray-200 p-5 flex items-center gap-4 hover:border-gray-900 transition-colors duration-150"
+            >
+              <div className="w-10 h-10 border border-gray-200 flex items-center justify-center">
+                <feature.icon className="w-5 h-5 text-gray-700" />
+              </div>
 
-            {/* Badge */}
-            <div className="relative flex justify-center mb-6 sm:mb-8">
-              <span className="inline-flex items-center gap-1.5 sm:gap-2 px-4 sm:px-6 py-2 sm:py-2.5 rounded-full bg-gradient-to-r from-primary-600 to-violet-600 text-white text-xs sm:text-sm font-semibold shadow-lg">
-                <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                All-In-One Marketing Automation
+              <span className="text-sm font-medium text-gray-800">
+                {feature.text}
               </span>
             </div>
+          ))}
+        </motion.div>
 
-            {/* Features Grid */}
-            <div className="relative grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 md:gap-6 mb-8 sm:mb-10">
-              {features.map((feature, index) => (
-                <motion.div
-                  key={feature.text}
-                  initial={{ opacity: 0, x: -10 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.3, delay: index * 0.05 }}
-                  className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 rounded-xl bg-gray-50/80 hover:bg-primary-50/80 transition-colors duration-300"
-                >
-                  <div className="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-white shadow-sm flex items-center justify-center">
-                    <feature.icon className="w-5 h-5 sm:w-6 sm:h-6 text-primary-600" />
-                  </div>
-                  <span className="text-sm sm:text-base font-medium text-gray-800">
-                    {feature.text}
-                  </span>
-                </motion.div>
-              ))}
-            </div>
+        {/* CTA — MATCH HERO BUTTONS */}
+        <motion.div
+          initial={{ opacity: 0, y: 28 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="flex flex-col sm:flex-row gap-3"
+        >
+          <Link
+            href="#cta"
+            className="group inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-gray-900 text-white text-sm font-semibold tracking-wide hover:bg-gray-700 transition-colors duration-150"
+          >
+            Book a Demo
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-150" />
+          </Link>
 
-            {/* CTA Section */}
-            <div className="relative flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4">
-              <Link
-                href="#cta"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 bg-gradient-to-r from-primary-600 to-violet-600 text-white rounded-full font-semibold shadow-lg shadow-primary-500/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 group text-sm sm:text-base"
-              >
-                <Calendar className="w-4 h-4 sm:w-5 sm:h-5" />
-                Book a Demo
-                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
-              </Link>
-              <Link
-                href="#cta"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 sm:px-8 py-3.5 sm:py-4 bg-gray-900 text-white rounded-full font-semibold hover:bg-gray-800 transition-all duration-300 group text-sm sm:text-base"
-              >
-                Contact Sales
-                <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </div>
+          <Link
+            href="#cta"
+            className="inline-flex items-center justify-center px-8 py-3.5 border border-gray-300 text-gray-700 text-sm font-semibold tracking-wide hover:border-gray-900 hover:text-gray-900 transition-colors duration-150"
+          >
+            Contact Sales
+          </Link>
+        </motion.div>
 
-            {/* Trust Badge */}
-            <div className="relative mt-6 sm:mt-8 pt-6 sm:pt-8 border-t border-gray-100">
-              <p className="text-center text-xs sm:text-sm text-gray-500">
-                ✓ No credit card required &nbsp;&nbsp; ✓ 14-day free trial
-                &nbsp;&nbsp; ✓ Cancel anytime
+        {/* Trust Row — HERO STATS STYLE */}
+        <div className="mt-20 grid grid-cols-3 divide-x divide-gray-200 border border-gray-200">
+          {[
+            { stat: "No credit card", label: "Required" },
+            { stat: "14 days", label: "Free trial" },
+            { stat: "Cancel", label: "Anytime" },
+          ].map((s) => (
+            <div key={s.label} className="px-8 py-6">
+              <p className="text-2xl font-black text-gray-900 mb-1 leading-none">
+                {s.stat}
+              </p>
+              <p className="text-xs font-mono uppercase tracking-widest text-gray-400">
+                {s.label}
               </p>
             </div>
-          </div>
-        </motion.div>
+          ))}
+        </div>
+
       </div>
     </section>
   );

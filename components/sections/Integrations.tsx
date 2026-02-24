@@ -144,8 +144,8 @@ export default function Integrations() {
           transition={{ duration: 0.5 }}
           className="text-center mb-12"
         >
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
-            Integrate with the tools you already use
+          <h2 className="text-5xl font-thin md:text-7xl xl:text-8xl font-black leading-[0.92] tracking-tight text-gray-900 mb-8">
+            Integrate with the ,<br /> tools you already use
           </h2>
           <p className="text-gray-600 max-w-xl mx-auto">
             Get more done in less time by connecting Space CRM to all your
@@ -173,9 +173,9 @@ export default function Integrations() {
               {[...integrations, ...integrations].map((integration, index) => (
                 <div
                   key={`${integration.name}-${index}`}
-                  className="flex items-center gap-3 px-6 py-4 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg hover:border-primary-200 hover:scale-105 transition-all duration-300 flex-shrink-0"
+                  className="flex items-center gap-3 px-6 py-4 bg-white border border-gray-100 shadow-sm hover:shadow-lg hover:border-primary-200 hover:scale-105 transition-all duration-300 flex-shrink-0"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center">
+                  <div className="w-10 h-10  bg-gray-50 flex items-center justify-center">
                     <integration.icon />
                   </div>
                   <span className="font-semibold text-gray-800 whitespace-nowrap">
@@ -203,9 +203,9 @@ export default function Integrations() {
               ].map((integration, index) => (
                 <div
                   key={`${integration.name}-reverse-${index}`}
-                  className="flex items-center gap-3 px-6 py-4 bg-white rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg hover:border-violet-200 hover:scale-105 transition-all duration-300 flex-shrink-0"
+                  className="flex items-center gap-3 px-6 py-4 bg-white  border border-gray-100 shadow-sm hover:shadow-lg hover:border-violet-200 hover:scale-105 transition-all duration-300 flex-shrink-0"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center">
+                  <div className="w-10 h-10 bg-yellow-50 flex items-center justify-center">
                     <integration.icon />
                   </div>
                   <span className="font-semibold text-gray-800 whitespace-nowrap">

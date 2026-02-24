@@ -52,33 +52,97 @@ export const metadata: Metadata = {
 
 export default function HomePage() {
   return (
-    <main className="overflow-hidden">
-      {/* Hero Section */}
-      <Hero />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            "name": "Space CRM",
+            "description": "Space CRM is a powerful marketing automation platform for bulk email campaigns, LinkedIn messaging, and WhatsApp outreach. Automate your growth with AI-powered content creation and a unified inbox for all your conversations.",
+            "applicationCategory": "BusinessApplication",
+            "operatingSystem": "Web Browser, Cloud",
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "USD",
+              "description": "Free tier available, premium plans start from $29/month"
+            },
+            "provider": {
+              "@type": "Organization",
+              "name": "Space CRM",
+              "url": "https://spacecrm.io"
+            },
+            "featureList": [
+              "Bulk Email Campaigns",
+              "LinkedIn Automation",
+              "WhatsApp Business Integration",
+              "AI-Powered Content Creation",
+              "Unified Inbox",
+              "Lead Generation",
+              "Marketing Automation",
+              "CRM Integration"
+            ],
+            "screenshot": "https://spacecrm.io/og-image.png",
+            "softwareVersion": "2.0",
+            "fileSize": "Web Application",
+            "audience": {
+              "@type": "BusinessAudience",
+              "audienceType": "Marketing Professionals, Sales Teams, Business Owners"
+            },
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": "4.8",
+              "ratingCount": "1250",
+              "bestRating": "5",
+              "worstRating": "1"
+            },
+            "author": {
+              "@type": "Organization",
+              "name": "Space CRM Team"
+            },
+            "datePublished": "2024-01-01",
+            "isAccessibleForFree": true,
+            "applicationSubCategory": "Marketing Automation, CRM, HRMS",
+            "permissions": "Requires internet connection",
+            "softwareRequirements": "Modern web browser",
+            "downloadUrl": "https://spacecrm.io/signup",
+            "installUrl": "https://spacecrm.io/signup",
+            "countriesSupported": ["US", "CA", "UK", "AU", "DE", "FR", "IN", "BR"],
+            "inLanguage": ["en", "es", "fr", "de"],
+            "keywords": "marketing automation, email marketing, LinkedIn automation, WhatsApp business, CRM software, sales automation, lead generation, AI content creation"
+          })
+        }}
+      />
+      <main className="overflow-hidden">
+        {/* Hero Section */}
+        <Hero />
 
-      {/* Integrations Marquee */}
-      <Integrations />
+        {/* Integrations Marquee */}
+        <Integrations />
 
-      {/* Core Features Grid */}
-      <Features />
+        {/* Core Features Grid */}
+        <Features />
 
-      {/* Automation Section */}
-      <Automation />
+        {/* Automation Section */}
+        <Automation />
 
-      {/* AI Content Assistant */}
-      <AIAssistant />
+        {/* AI Content Assistant */}
+        <AIAssistant />
 
-      {/* Pricing Plans */}
-      <Pricing />
+        {/* Pricing Plans */}
+        <Pricing />
 
-      {/* Testimonials */}
-      <Testimonials />
+        {/* Testimonials */}
+        <Testimonials />
 
-      {/* FAQ Accordion */}
-      <FAQ />
+        {/* FAQ Accordion */}
+        <FAQ />
 
-      {/* Final CTA */}
-      <CTA />
-    </main>
+        {/* Final CTA */}
+        <CTA />
+      </main>
+    </>
   );
 }

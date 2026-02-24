@@ -5,24 +5,28 @@ const footerLinks = {
   product: {
     title: "Product",
     links: [
-      { label: "Overview", href: "#" },
-      { label: "Pricing", href: "#pricing" },
-      { label: "Integrations", href: "#integrations" },
-      { label: "Changelog", href: "#" },
-      { label: "Demo", href: "#" },
+      { label: "Features", href: "/features" },
+      { label: "Pricing", href: "/pricing" },
+      { label: "Integrations", href: "/integrations" },
+      { label: "Demo", href: "/demo" },
     ],
   },
-  features: {
-    title: "Features",
+  company: {
+    title: "Company",
     links: [
-      { label: "Email Campaigns", href: "#" },
-      { label: "LinkedIn Automation", href: "#" },
-      { label: "WhatsApp Messaging", href: "#" },
-      { label: "AI Assistant", href: "#" },
-      { label: "Unified Inbox", href: "#" },
+      { label: "About", href: "/about" },
+      { label: "Blog", href: "/blog" },
+      { label: "Compare", href: "/compare" },
+      { label: "Industries", href: "/industries" },
     ],
   },
-
+  developers: {
+    title: "Developers",
+    links: [
+      { label: "API Documentation", href: "/api" },
+      { label: "Changelog", href: "/blog" },
+    ],
+  },
 };
 
 const socialLinks = [
@@ -34,48 +38,52 @@ const socialLinks = [
 
 export default function Footer() {
   return (
-    <footer className="bg-gradient-to-b from-slate-900 to-slate-950 text-gray-300">
-      <div className="container-custom py-16 md:py-20">
-        {/* Main Footer Content */}
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8 lg:gap-12">
-          {/* Brand Column */}
-          <div className="col-span-2 md:col-span-4 lg:col-span-1 mb-8 lg:mb-0">
-            <Link href="/" className="flex items-center gap-2 mb-6">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-violet-500 flex items-center justify-center">
-                <Rocket className="w-5 h-5 text-white" />
+    <footer className="bg-white border-t-2 border-gray-900">
+
+      {/* ── Main grid ── */}
+      <div className="max-w-6xl mx-auto px-6 lg:px-12 py-16 lg:py-20">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-12">
+
+          {/* Brand column */}
+          <div className="col-span-2 md:col-span-4 lg:col-span-2">
+            <Link href="/" className="inline-flex items-center gap-2.5 mb-6 group">
+              <div className="w-8 h-8 bg-gray-900 flex items-center justify-center group-hover:bg-gray-700 transition-colors duration-150">
+                <Rocket className="w-4 h-4 text-white" />
               </div>
-              <span className="text-xl font-bold text-white">Space CRM</span>
+              <span className="text-base font-black tracking-tight text-gray-900">Space CRM</span>
             </Link>
-            <p className="text-sm text-gray-400 mb-6 leading-relaxed">
-              Automate your growth across every channel with AI-powered
-              marketing automation for Email, LinkedIn, and WhatsApp.
+
+            <p className="text-sm text-gray-500 mb-8 leading-relaxed max-w-xs">
+              Automate your growth across every channel with AI-powered marketing automation for Email, LinkedIn, and WhatsApp.
             </p>
-            <div className="flex items-center gap-4">
+
+            {/* Social links */}
+            <div className="flex items-center gap-3">
               {socialLinks.map((social) => (
                 <a
                   key={social.label}
                   href={social.href}
                   aria-label={social.label}
-                  className="w-10 h-10 rounded-lg bg-white/5 hover:bg-white/10 flex items-center justify-center transition-colors duration-200"
+                  className="w-9 h-9 border border-gray-200 flex items-center justify-center text-gray-400 hover:border-gray-900 hover:text-gray-900 transition-colors duration-150"
                 >
-                  <social.icon className="w-5 h-5" />
+                  <social.icon className="w-4 h-4" />
                 </a>
               ))}
             </div>
           </div>
 
-          {/* Links Columns */}
+          {/* Nav columns */}
           {Object.values(footerLinks).map((section) => (
             <div key={section.title}>
-              <h3 className="text-sm font-semibold text-white mb-4">
+              <p className="text-xs font-mono tracking-[0.2em] uppercase text-gray-400 mb-5">
                 {section.title}
-              </h3>
+              </p>
               <ul className="space-y-3">
                 {section.links.map((link) => (
                   <li key={link.label}>
                     <Link
                       href={link.href}
-                      className="text-sm text-gray-400 hover:text-white transition-colors duration-200"
+                      className="text-sm text-gray-600 hover:text-gray-900 transition-colors duration-150"
                     >
                       {link.label}
                     </Link>
@@ -85,43 +93,41 @@ export default function Footer() {
             </div>
           ))}
         </div>
+      </div>
 
-        {/* Bottom Bar */}
-        <div className="mt-16 pt-8 border-t border-white/10">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-gray-400">
+      {/* ── Bottom bar ── */}
+      <div className="border-t border-gray-200">
+        <div className="max-w-6xl mx-auto px-6 lg:px-12 py-5">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-xs font-mono text-gray-400">
               © {new Date().getFullYear()} Space CRM. All rights reserved.
             </p>
-            <div className="flex flex-wrap items-center justify-center md:justify-end gap-4 sm:gap-6">
-              <Link
-                href="#"
-                className="text-xs sm:text-sm text-gray-400 hover:text-white transition-colors"
-              >
-                Privacy Policy
-              </Link>
-              <Link
-                href="#"
-                className="text-xs sm:text-sm text-gray-400 hover:text-white transition-colors"
-              >
-                Terms of Service
-              </Link>
-              <Link
-                href="#"
-                className="text-xs sm:text-sm text-gray-400 hover:text-white transition-colors"
-              >
-                Cookie Settings
-              </Link>
+            <div className="flex items-center gap-6">
+              {[
+                { label: "Privacy Policy", href: "/privacy" },
+                { label: "Terms of Service", href: "/terms" },
+                { label: "Cookie Settings", href: "/cookies" }
+              ].map((link) => (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className="text-xs font-mono text-gray-400 hover:text-gray-900 transition-colors duration-150"
+                >
+                  {link.label}
+                </Link>
+              ))}
             </div>
           </div>
         </div>
       </div>
 
-      {/* Large Brand Text */}
-      <div className="relative overflow-hidden py-4 sm:py-8">
-        <div className="text-[4rem] sm:text-[6rem] md:text-[8rem] lg:text-[12rem] font-black text-center text-white/[0.02] select-none leading-none">
+      {/* ── Large watermark ── */}
+      <div className="overflow-hidden border-t border-gray-100">
+        <p className="text-[4rem] sm:text-[6rem] md:text-[8rem] lg:text-[10rem] font-black text-center text-gray-100 select-none leading-none py-2">
           SPACE CRM
-        </div>
+        </p>
       </div>
+
     </footer>
   );
 }
