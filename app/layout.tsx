@@ -63,7 +63,7 @@ export const metadata: Metadata = {
     creator: "@spacecrm",
   },
   verification: {
-    google: "google-site-verification-code",
+    google: "SoHaY3sbduk79rVVOQg6TGkOBX6dsQfZNff6kyBzeWs",
   },
   alternates: {
     canonical: "https://spacecrm.io",
