@@ -8,7 +8,7 @@ interface BlogDetailsPageProps {
   params: Promise<{ slug: string }>;
 }
 
-const BASE_BLOG_URL = "https://spacecrm.io/blog";
+const BASE_BLOG_URL = "https://spacecrm.net/blog";
 
 export async function generateStaticParams() {
   return BLOG_POSTS.map((post) => ({
@@ -44,13 +44,13 @@ export async function generateMetadata({
       publishedTime: `${post.publishedAt}T00:00:00.000Z`,
       section: post.category,
       authors: [post.author],
-      images: [{ url: `https://spacecrm.io${post.image}`, width: 1200, height: 630, alt: post.title }],
+      images: [{ url: `https://spacecrm.net${post.image}`, width: 1200, height: 630, alt: post.title }],
     },
     twitter: {
       card: "summary_large_image",
       title: post.title,
       description: post.excerpt,
-      images: [`https://spacecrm.io${post.image}`],
+      images: [`https://spacecrm.net${post.image}`],
     },
   };
 }
@@ -78,18 +78,18 @@ export default async function BlogDetailsPage({ params }: BlogDetailsPageProps) 
     publisher: {
       "@type": "Organization",
       name: "Space CRM",
-      logo: { "@type": "ImageObject", url: "https://spacecrm.io/icononly_transparent_nobuffer.png" },
+      logo: { "@type": "ImageObject", url: "https://spacecrm.net/icononly_transparent_nobuffer.png" },
     },
     articleSection: post.category,
     keywords: post.keywords.join(", "),
-    image: `https://spacecrm.io${post.image}`,
+    image: `https://spacecrm.net${post.image}`,
   };
 
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Home", item: "https://spacecrm.io" },
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://spacecrm.net" },
       { "@type": "ListItem", position: 2, name: "Blog", item: BASE_BLOG_URL },
       { "@type": "ListItem", position: 3, name: post.title, item: `${BASE_BLOG_URL}/${post.slug}` },
     ],

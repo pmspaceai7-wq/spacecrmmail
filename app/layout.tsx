@@ -4,7 +4,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://spacecrm.io"),
+  metadataBase: new URL("https://spacecrm.net"),
   title: {
     default: "Space CRM - Marketing Automation for Email, LinkedIn & WhatsApp",
     template: "%s | Space CRM",
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://spacecrm.io",
+    url: "https://spacecrm.net",
     siteName: "Space CRM",
     title: "Space CRM - Marketing Automation for Email, LinkedIn & WhatsApp",
     description:
@@ -66,7 +66,7 @@ export const metadata: Metadata = {
     google: "SoHaY3sbduk79rVVOQg6TGkOBX6dsQfZNff6kyBzeWs",
   },
   alternates: {
-    canonical: "https://spacecrm.io",
+    canonical: "https://spacecrm.net",
   },
   icons: {
     icon: [
@@ -94,3 +94,4 @@ export default function RootLayout({
     </html>
   );
 }
+

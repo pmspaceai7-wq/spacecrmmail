@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     title: "Pricing - Space CRM Marketing Automation Platform",
     description:
       "Flexible pricing plans for marketing automation across Email, LinkedIn, and WhatsApp.",
-    url: "https://spacecrm.io/pricing",
+    url: "https://spacecrm.net/pricing",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Space CRM Pricing" }],
   },
   twitter: {
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     title: "Space CRM Pricing",
     description: "Choose the right plan for your marketing automation needs.",
   },
-  alternates: { canonical: "https://spacecrm.io/pricing" },
+  alternates: { canonical: "https://spacecrm.net/pricing" },
 };
 
 const plans = [

@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Terms of Service - Space CRM",
     description: "Read our terms and conditions for using Space CRM.",
-    url: "https://spacecrm.io/terms",
+    url: "https://spacecrm.net/terms",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Space CRM Terms of Service" }],
   },
   twitter: {
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     title: "Space CRM Terms of Service",
     description: "Read our terms and conditions for using Space CRM.",
   },
-  alternates: { canonical: "https://spacecrm.io/terms" },
+  alternates: { canonical: "https://spacecrm.net/terms" },
 };
 
 export default function TermsPage() {
@@ -167,7 +167,7 @@ export default function TermsPage() {
             If you have questions about these Terms, please contact us:
           </p>
           <ul className="list-none text-gray-700 mb-6">
-            <li>Email: legal@spacecrm.io</li>
+            <li>Email: legal@spacecrm.net</li>
             <li>Address: [Your Business Address]</li>
           </ul>
 

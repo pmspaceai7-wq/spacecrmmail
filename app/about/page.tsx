@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     title: "About Us - Space CRM Marketing Automation Platform",
     description:
       "Learn about Space CRM's mission to revolutionize marketing automation with AI-powered tools.",
-    url: "https://spacecrm.io/about",
+    url: "https://spacecrm.net/about",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "About Space CRM" }],
   },
   twitter: {
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
     title: "About Space CRM",
     description: "Learn about our mission to revolutionize marketing automation.",
   },
-  alternates: { canonical: "https://spacecrm.io/about" },
+  alternates: { canonical: "https://spacecrm.net/about" },
 };
 
 // ── Data ──────────────────────────────────────────────────────────────────
@@ -381,9 +381,9 @@ export default function AboutPage() {
           </div>
           <div className="grid md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-gray-200 border border-gray-200">
             {[
-              { label: "General", email: "hello@spacecrm.io", desc: "Partnerships, press, and general enquiries." },
-              { label: "Support", email: "support@spacecrm.io", desc: "Technical help and account questions." },
-              { label: "Sales", email: "sales@spacecrm.io", desc: "Enterprise plans and custom pricing." },
+              { label: "General", email: "hello@spacecrm.net", desc: "Partnerships, press, and general enquiries." },
+              { label: "Support", email: "support@spacecrm.net", desc: "Technical help and account questions." },
+              { label: "Sales", email: "sales@spacecrm.net", desc: "Enterprise plans and custom pricing." },
             ].map((contact) => (
               <div key={contact.label} className="p-8 group hover:bg-gray-50 transition-colors duration-200">
                 <p className="text-xs font-mono uppercase tracking-widest text-gray-400 mb-4">{contact.label}</p>

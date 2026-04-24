@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { getAllBlogs } from "@/lib/data/blogs";
 
-const BLOG_URL = "https://spacecrm.io/blog";
+const BLOG_URL = "https://spacecrm.net/blog";
 
 export const metadata: Metadata = {
   title: "Blog | CRM & Marketing Automation Insights",

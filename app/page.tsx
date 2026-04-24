@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     title: "Space CRM - Automate Your Growth Across Every Channel",
     description:
       "Powerful marketing automation for Email, LinkedIn, and WhatsApp. AI-powered content creation and unified inbox.",
-    url: "https://spacecrm.io",
+    url: "https://spacecrm.net",
     images: [
       {
         url: "/og-image.png",
@@ -46,7 +46,7 @@ export const metadata: Metadata = {
       "Automate your growth across Email, LinkedIn, and WhatsApp with AI-powered tools.",
   },
   alternates: {
-    canonical: "https://spacecrm.io",
+    canonical: "https://spacecrm.net",
   },
 };
 
@@ -72,7 +72,7 @@ export default function HomePage() {
             "provider": {
               "@type": "Organization",
               "name": "Space CRM",
-              "url": "https://spacecrm.io"
+              "url": "https://spacecrm.net"
             },
             "featureList": [
               "Bulk Email Campaigns",
@@ -84,7 +84,7 @@ export default function HomePage() {
               "Marketing Automation",
               "CRM Integration"
             ],
-            "screenshot": "https://spacecrm.io/og-image.png",
+            "screenshot": "https://spacecrm.net/og-image.png",
             "softwareVersion": "2.0",
             "fileSize": "Web Application",
             "audience": {
@@ -107,8 +107,8 @@ export default function HomePage() {
             "applicationSubCategory": "Marketing Automation, CRM, HRMS",
             "permissions": "Requires internet connection",
             "softwareRequirements": "Modern web browser",
-            "downloadUrl": "https://spacecrm.io/signup",
-            "installUrl": "https://spacecrm.io/signup",
+            "downloadUrl": "https://spacecrm.net/signup",
+            "installUrl": "https://spacecrm.net/signup",
             "countriesSupported": ["US", "CA", "UK", "AU", "DE", "FR", "IN", "BR"],
             "inLanguage": ["en", "es", "fr", "de"],
             "keywords": "marketing automation, email marketing, LinkedIn automation, WhatsApp business, CRM software, sales automation, lead generation, AI content creation"
@@ -146,3 +146,4 @@ export default function HomePage() {
     </>
   );
 }
+

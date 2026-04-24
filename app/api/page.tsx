@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "API Documentation - Space CRM",
     description: "Comprehensive API documentation for integrating with Space CRM.",
-    url: "https://spacecrm.io/api",
+    url: "https://spacecrm.net/api",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Space CRM API Documentation" }],
   },
   twitter: {
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     title: "Space CRM API Documentation",
     description: "Integrate with Space CRM using our REST API.",
   },
-  alternates: { canonical: "https://spacecrm.io/api" },
+  alternates: { canonical: "https://spacecrm.net/api" },
 };
 
 const endpoints = [
@@ -32,14 +32,14 @@ const endpoints = [
     method: "GET",
     path: "/api/contacts",
     description: "Retrieve a list of contacts",
-    example: `curl -X GET "https://api.spacecrm.io/contacts" \\
+    example: `curl -X GET "https://api.spacecrm.net/contacts" \\
   -H "Authorization: Bearer YOUR_API_KEY"`,
   },
   {
     method: "POST",
     path: "/api/contacts",
     description: "Create a new contact",
-    example: `curl -X POST "https://api.spacecrm.io/contacts" \\
+    example: `curl -X POST "https://api.spacecrm.net/contacts" \\
   -H "Authorization: Bearer YOUR_API_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{
@@ -52,7 +52,7 @@ const endpoints = [
     method: "POST",
     path: "/api/campaigns/email",
     description: "Send an email campaign",
-    example: `curl -X POST "https://api.spacecrm.io/campaigns/email" \\
+    example: `curl -X POST "https://api.spacecrm.net/campaigns/email" \\
   -H "Authorization: Bearer YOUR_API_KEY" \\
   -H "Content-Type: application/json" \\
   -d '{
@@ -65,7 +65,7 @@ const endpoints = [
     method: "GET",
     path: "/api/analytics",
     description: "Get campaign analytics",
-    example: `curl -X GET "https://api.spacecrm.io/analytics?campaign_id=123" \\
+    example: `curl -X GET "https://api.spacecrm.net/analytics?campaign_id=123" \\
   -H "Authorization: Bearer YOUR_API_KEY"`,
   },
 ];
@@ -126,7 +126,7 @@ export default function ApiPage() {
                 </p>
                 <div className="bg-gray-50 p-4 rounded font-mono text-sm">
                   <div className="text-gray-500 mb-2"># Example request</div>
-                  curl -X GET "https://api.spacecrm.io/contacts" \<br />
+                  curl -X GET "https://api.spacecrm.net/contacts" \<br />
                   &nbsp;&nbsp;-H "Authorization: Bearer YOUR_API_KEY"
                 </div>
               </div>
@@ -212,11 +212,11 @@ export default function ApiPage() {
 
             <div className="space-y-4">
               <Link
-                href="mailto:api@spacecrm.io"
+                href="mailto:api@spacecrm.net"
                 className="flex items-center gap-2 text-gray-900 hover:text-gray-700"
               >
                 <ExternalLink className="w-4 h-4" />
-                api@spacecrm.io
+                api@spacecrm.net
               </Link>
 
               <Link

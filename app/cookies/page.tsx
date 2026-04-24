@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Cookie Settings - Space CRM",
     description: "Manage your cookie preferences and privacy settings.",
-    url: "https://spacecrm.io/cookies",
+    url: "https://spacecrm.net/cookies",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Space CRM Cookie Settings" }],
   },
   twitter: {
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     title: "Space CRM Cookie Settings",
     description: "Manage your cookie preferences and privacy settings.",
   },
-  alternates: { canonical: "https://spacecrm.io/cookies" },
+  alternates: { canonical: "https://spacecrm.net/cookies" },
 };
 
 const cookieCategories = [
@@ -196,7 +196,7 @@ export default function CookiesPage() {
               If you have questions about our cookie practices or need assistance with your preferences, please contact us:
             </p>
             <ul className="list-none text-gray-700">
-              <li>Email: privacy@spacecrm.io</li>
+              <li>Email: privacy@spacecrm.net</li>
               <li>Address: [Your Business Address]</li>
             </ul>
           </div>

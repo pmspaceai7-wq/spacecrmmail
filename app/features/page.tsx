@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     title: "Features - Space CRM Marketing Automation Platform",
     description:
       "Discover all the powerful features of Space CRM for automated marketing and sales growth.",
-    url: "https://spacecrm.io/features",
+    url: "https://spacecrm.net/features",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Space CRM Features Overview" }],
   },
   twitter: {
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     title: "Features - Space CRM Marketing Automation",
     description: "Discover all the powerful features of Space CRM for automated marketing and sales growth.",
   },
-  alternates: { canonical: "https://spacecrm.io/features" },
+  alternates: { canonical: "https://spacecrm.net/features" },
 };
 
 // ── Data ──────────────────────────────────────────────────────────────────
@@ -130,7 +130,7 @@ export default function FeaturesPage() {
             applicationCategory: "BusinessApplication",
             operatingSystem: "Web Browser, Cloud",
             offers: { "@type": "Offer", price: "0", priceCurrency: "USD", description: "Free tier available, premium plans start from $29/month" },
-            provider: { "@type": "Organization", name: "Space CRM", url: "https://spacecrm.io" },
+            provider: { "@type": "Organization", name: "Space CRM", url: "https://spacecrm.net" },
             featureList: ["Bulk Email Campaigns", "LinkedIn Automation", "WhatsApp Business Integration", "AI-Powered Content Creation", "Unified Inbox Management", "Advanced Lead Generation", "Workflow Automation", "CRM Integration", "Team Collaboration Tools", "Advanced Analytics & Reporting", "SOC 2 Compliance", "GDPR Compliance"],
             aggregateRating: { "@type": "AggregateRating", ratingValue: "4.8", ratingCount: "1250", bestRating: "5", worstRating: "1" },
           }),

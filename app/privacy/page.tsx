@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Privacy Policy - Space CRM",
     description: "Learn how we protect your data and privacy.",
-    url: "https://spacecrm.io/privacy",
+    url: "https://spacecrm.net/privacy",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "Space CRM Privacy Policy" }],
   },
   twitter: {
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     title: "Space CRM Privacy Policy",
     description: "Learn how we protect your data and privacy.",
   },
-  alternates: { canonical: "https://spacecrm.io/privacy" },
+  alternates: { canonical: "https://spacecrm.net/privacy" },
 };
 
 export default function PrivacyPage() {
@@ -161,7 +161,7 @@ export default function PrivacyPage() {
             If you have any questions about this Privacy Policy or our data practices, please contact us:
           </p>
           <ul className="list-none text-gray-700 mb-6">
-            <li>Email: privacy@spacecrm.io</li>
+            <li>Email: privacy@spacecrm.net</li>
             <li>Address: [Your Business Address]</li>
           </ul>
 
