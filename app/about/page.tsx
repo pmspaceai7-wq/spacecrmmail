@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     "AI marketing tools",
     "multichannel marketing",
     "business growth automation",
-    "AI marketing tools 2026"
+    "AI marketing tools 2026",
     "Advanced AI marketing tools 2026"
   ],
   openGraph: {
