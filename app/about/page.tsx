@@ -13,6 +13,7 @@ export const metadata: Metadata = {
     "multichannel marketing",
     "business growth automation",
     "AI marketing tools 2026"
+    "Advanced AI marketing tools 2026"
   ],
   openGraph: {
     title: "About Us - Space CRM Marketing Automation Platform",
