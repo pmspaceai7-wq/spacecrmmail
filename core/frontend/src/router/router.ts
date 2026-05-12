@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
-import { is, isDev } from '@/utils'
+import { isDev } from '@/utils'
 
 // Routes reflect list
 const routesReflectList = [
@@ -24,7 +24,7 @@ const routesReflectList = [
 const modules = import.meta.webpackContext('./modules', {
 	// Whether to search for subdirectories
 	recursive: false,
-	regExp: /^[^.]+\.ts$/,
+	regExp: /^\.\/[^.]+\.ts$/,
 })
 
 // Module routes
@@ -32,8 +32,8 @@ export let menuList: RouteRecordRaw[] = []
 
 // Iterate through the module list to generate module routes
 for (const path of modules.keys()) {
-	const mod = modules(path)
-	if (is<{ default: RouteRecordRaw }>(mod, 'Module')) {
+	const mod = modules(path) as { default?: RouteRecordRaw }
+	if (mod && mod.default && (mod.default as RouteRecordRaw).path) {
 		menuList.push(mod.default)
 	}
 }
@@ -44,6 +44,9 @@ menuList = menuList.reduce((p: RouteRecordRaw[], v: RouteRecordRaw) => {
 	p[routeIndex] = v
 	return p
 }, [] as RouteRecordRaw[])
+
+// Drop sparse holes (entries in routesReflectList that have no matching module)
+menuList = menuList.filter(Boolean)
 
 const otherArray: RouteRecordRaw[] = []
 

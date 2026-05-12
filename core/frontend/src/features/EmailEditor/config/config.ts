@@ -420,14 +420,14 @@ export const copyrightVNode = h(
 		h(
 			'a',
 			{
-				href: 'https://www.billionmail.com',
+				href: 'https://www.spacecrm.net',
 				target: '_blank',
 				style: {
 					color: '#999',
 					textDecoration: 'underline',
 				},
 			},
-			'BillionMail'
+			'SPACE CRM'
 		),
 	]
 )

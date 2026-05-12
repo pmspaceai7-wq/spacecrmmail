@@ -59,7 +59,7 @@ const onUpdateEnabled = (val: boolean) => {
 }
 
 const handleClickHelp = () => {
-	window.open('https://billionmail.com/start/api_usage_guide.html')
+	window.open('https://docs.spacecrm.net/start/api_usage_guide.html')
 }
 </script>
 

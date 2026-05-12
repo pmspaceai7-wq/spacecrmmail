@@ -1,6 +1,6 @@
 <?php
     # Product name
-    $config['product_name'] = 'BillionMail';
+    $config['product_name'] = 'SPACE CRM';
 
     $config['mime_types'] = '/var/roundcube/config/mime.types';
        

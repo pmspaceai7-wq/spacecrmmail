@@ -20,18 +20,15 @@
 				:options="langOptions"
 				@select="handleLangAction">
 				<n-button class="icon-btn" :bordered="false">
-					<i class="icon i-mdi-language text-20px"></i>
+					<i class="icon i-mdi-earth text-20px"></i>
 				</n-button>
 			</n-dropdown>
 			<InstanceSwitcher />
 			<n-dropdown size="large" :options="userOptions" @select="handleUserAction">
 				<n-button class="icon-btn" :bordered="false">
-					<i class="icon i-mdi-user-outline"></i>
+					<i class="icon i-mdi-account-outline"></i>
 				</n-button>
 			</n-dropdown>
-			<n-button type="primary" text class="text-14px" @click="handleGoVersion">
-				{{ version }}
-			</n-button>
 		</div>
 	</n-layout-header>
 </template>
@@ -41,8 +38,6 @@ import { storeToRefs } from 'pinia'
 import { DropdownOption } from 'naive-ui'
 import { useUserStore, useGlobalStore, useThemeStore } from '@/store'
 import InstanceSwitcher from './InstanceSwitcher.vue'
-import { getVersionInfo } from '@/api/modules/settings'
-import { isObject } from '@/utils'
 
 defineProps({
 	top: {
@@ -52,8 +47,6 @@ defineProps({
 })
 
 const { t } = useI18n()
-
-const version = ref('--')
 
 const userStore = useUserStore()
 
@@ -97,10 +90,6 @@ const handleUserAction = (key: string) => {
 	}
 }
 
-const handleGoVersion = () => {
-	window.open('https://github.com/aaPanel/BillionMail/releases')
-}
-
 const getLangOptions = async () => {
 	langOptions.value = langList.value.map(item => {
 		return {
@@ -110,15 +99,7 @@ const getLangOptions = async () => {
 	})
 }
 
-const getVersion = async () => {
-	const res = await getVersionInfo()
-	if (isObject<{ version: string }>(res)) {
-		version.value = `v${res.version}`
-	}
-}
-
 onMounted(() => {
-	getVersion()
 	getLangOptions()
 })
 </script>
@@ -134,8 +115,17 @@ onMounted(() => {
 	align-items: center;
 	height: 48px;
 	padding: 0 20px 0 12px;
+	background: rgba(255, 255, 255, 0.85);
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	border-bottom: 1px solid var(--color-border-1);
 	box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
 	z-index: 1000;
+}
+
+:root[theme-mode='dark'] .n-layout-header {
+	background: rgba(31, 18, 53, 0.85);
+	border-bottom-color: var(--color-border-1);
 }
 
 .header-left,
@@ -146,7 +136,7 @@ onMounted(() => {
 }
 
 .header-item {
-	color: var(--color-text-4);
+	color: var(--color-text-1);
 	font-size: 14px;
 	text-align: center;
 	font-weight: 600;
@@ -157,7 +147,21 @@ onMounted(() => {
 	--n-height: 48px;
 	--n-padding: 0;
 	--n-font-size: 22px;
-	--n-text-color: var(--color-text-4);
+	--n-text-color: var(--color-text-1);
+	--n-text-color-hover: var(--color-primary-1);
+	--n-text-color-pressed: var(--color-primary-hover-1);
+	--n-text-color-focus: var(--color-primary-1);
 	--n-ripple-color: none;
+	color: var(--color-text-1);
+
+	:deep(.icon),
+	:deep(i) {
+		color: var(--color-text-1);
+	}
+
+	&:hover :deep(.icon),
+	&:hover :deep(i) {
+		color: var(--color-primary-1);
+	}
 }
 </style>

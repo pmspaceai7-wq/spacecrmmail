@@ -40,7 +40,7 @@
 				<n-button type="primary" @click="handleAdd">
 					{{ $t('api.createNew') }}
 				</n-button>
-				<bt-help href="https://www.billionmail.com/start/api_mail_guide.html" :text="$t('common.actions.help')">
+				<bt-help href="https://docs.spacecrm.net/start/api_mail_guide.html" :text="$t('common.actions.help')">
 				</bt-help>
 			</template>
 			<template #table>

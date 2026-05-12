@@ -7,7 +7,7 @@
 				</div>
 			</div>
 
-			<h2 class="login-title">BillionMail</h2>
+			<h2 class="login-title">SPACE CRM</h2>
 
 			<n-form ref="formRef" size="large" :model="form" :rules="rules">
 				<n-form-item :show-label="false" path="username">
@@ -161,9 +161,9 @@ getCode()
 .login-container {
 	--text-dark: var(--color-text-1);
 	--text-light: var(--color-text-2);
-	--accent-green: #25cdb1;
-	--accent-purple: #7e6ed5;
-	--border-light: #ddd;
+	--accent-pink: #ec4899;
+	--accent-purple: #a855f7;
+	--border-light: #f3e8ff;
 }
 
 .login-container {
@@ -172,17 +172,18 @@ getCode()
 	justify-content: center;
 	align-items: center;
 	min-height: 100%;
-	background: var(--color-bg-3);
+	background: var(--app-gradient);
 	overflow: hidden;
 	&::before {
 		content: '';
 		position: absolute;
 		top: -15%;
 		right: -15%;
-		width: 40vw;
-		height: 40vw;
+		width: 45vw;
+		height: 45vw;
 		border-radius: 50%;
-		background-color: var(--accent-green);
+		background: radial-gradient(circle, var(--accent-pink) 0%, rgba(236, 72, 153, 0) 70%);
+		opacity: 0.55;
 		z-index: 0;
 	}
 	&::after {
@@ -190,55 +191,52 @@ getCode()
 		position: absolute;
 		left: -15%;
 		bottom: -15%;
-		width: 40vw;
-		height: 40vw;
+		width: 45vw;
+		height: 45vw;
 		border-radius: 50%;
-		background-color: var(--accent-purple);
+		background: radial-gradient(circle, var(--accent-purple) 0%, rgba(168, 85, 247, 0) 70%);
+		opacity: 0.55;
 		z-index: 0;
 	}
 }
 
 .login-card {
 	width: 100%;
-	max-width: 400px;
+	max-width: 420px;
 	background-color: var(--color-bg-1);
-	padding: 52px 32px 62px;
-	border-radius: 8px;
-	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+	padding: 56px 36px 64px;
+	border-radius: 16px;
+	box-shadow:
+		0 20px 50px -20px rgba(168, 85, 247, 0.35),
+		0 8px 24px -12px rgba(236, 72, 153, 0.18);
 	z-index: 1;
+	border: 1px solid var(--color-border-1);
 }
 
 .logo {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 70px;
+	width: 80px;
 
 	&-container {
 		display: flex;
 		align-items: center;
 		justify-content: center;
 	}
-
-	&-icon {
-		width: 24px;
-		height: 24px;
-		color: white;
-	}
-
-	&-text {
-		font-size: 20px;
-		font-weight: 600;
-		color: var(--text-dark);
-	}
 }
 
 .login-title {
-	margin-top: 0;
-	margin-bottom: 32px;
+	margin-top: 12px;
+	margin-bottom: 36px;
 	text-align: center;
-	font-weight: 500;
-	color: var(--text-dark);
+	font-size: 28px;
+	font-weight: 800;
+	letter-spacing: -0.02em;
+	background: linear-gradient(135deg, #ec4899 0%, #a855f7 100%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
 }
 
 .code {

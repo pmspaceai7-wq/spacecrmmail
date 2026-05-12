@@ -10,6 +10,12 @@ import '@/styles/index.scss'
 
 const app = createApp(App)
 
+app.config.errorHandler = (err, _instance, info) => {
+	console.error('[Vue errorHandler]', info, err)
+}
+window.addEventListener('error', e => console.error('[window.error]', e.error || e.message))
+window.addEventListener('unhandledrejection', e => console.error('[unhandledrejection]', e.reason))
+
 app.use(i18n)
 app.use(pinia)
 app.use(router)

@@ -17,7 +17,9 @@ const i18n = createI18n({
 
 // 提供切换语言的方法
 export const setLanguage = (locale: string) => {
-	i18n.global.locale.value = locale as 'en' | 'zh' | 'ja'
+	const supported = ['en', 'zh', 'ja']
+	const safe = supported.includes(locale) ? locale : 'en'
+	i18n.global.locale.value = safe as 'en' | 'zh' | 'ja'
 }
 
 export default i18n

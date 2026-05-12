@@ -295,7 +295,7 @@ func (e *EmailSender) GenerateMessageID() string {
 	timestampMillis := time.Now().UnixMilli()
 
 	domain := strings.SplitN(e.Email, "@", 2)
-	domainPart := "billionmail"
+	domainPart := "spacecrm"
 	if len(domain) > 1 {
 		domainPart = domain[1]
 	}

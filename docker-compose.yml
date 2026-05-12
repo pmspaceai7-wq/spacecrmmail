@@ -173,7 +173,12 @@ services:
             - webmail
 
     core-billionmail:
-      image: billionmail/core:4.9.3
+      build:
+        context: .
+        dockerfile: Dockerfiles/core/Dockerfile
+        args:
+          TARGETARCH: amd64
+      image: billionmail/core:spacecrm
       hostname: core-manage
       depends_on:
         - pgsql-billionmail
@@ -192,6 +197,7 @@ services:
         - ./logs:/opt/billionmail/logs
         - ./logs/core:/opt/billionmail/core/logs
         - ./core-data:/opt/billionmail/core/data
+        - ./core/frontend/dist:/opt/billionmail/core/public/dist:ro
         - /var/run/docker.sock:/var/run/docker.sock:ro
         - ./vmail-data:/opt/billionmail/vmail-data
       environment:

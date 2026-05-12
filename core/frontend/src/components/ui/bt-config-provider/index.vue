@@ -47,15 +47,14 @@ const themeRef = computed(() => {
 	return null
 })
 
-const locale = computed(() => {
-	const langObj = langMap[lang.value as keyof typeof langMap]
-	return langObj.locale
-})
+const resolveLang = () => {
+	const key = lang.value as keyof typeof langMap
+	return langMap[key] || langMap.en
+}
 
-const dateLocale = computed(() => {
-	const langObj = langMap[lang.value as keyof typeof langMap]
-	return langObj.dateLocale
-})
+const locale = computed(() => resolveLang().locale)
+
+const dateLocale = computed(() => resolveLang().dateLocale)
 
 // const themeOverrides: GlobalThemeOverrides = {
 // 	common: {

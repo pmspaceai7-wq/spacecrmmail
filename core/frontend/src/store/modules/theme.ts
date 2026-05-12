@@ -13,12 +13,14 @@ export default defineStore(
 		const getThemeOverrides = (): GlobalThemeOverrides => {
 			return {
 				common: {
-					lineHeight: 'normal',
-					fontSize: '12px',
-					fontSizeSmall: '12px',
-					fontSizeMedium: '12px',
-					fontSizeLarge: '14px',
-					borderRadius: '4px',
+					lineHeight: '1.5',
+					fontSize: '14px',
+					fontSizeSmall: '13px',
+					fontSizeMedium: '14px',
+					fontSizeLarge: '15px',
+					fontWeight: '500',
+					fontWeightStrong: '700',
+					borderRadius: '10px',
 					baseColor: '#fff',
 					textColor1: getCssVar('--color-text-1'),
 					textColor2: getCssVar('--color-text-2'),
