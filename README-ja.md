@@ -38,14 +38,6 @@ cd /opt && git clone https://github.com/pmspaceai7-wq/spacecrmmail && cd spacecr
 * リストとタグを選択
 * 送信日時を設定または今すぐ送信
 
-<div align="center">
-  <a href="https://www.youtube.com/embed/UHgxZa_9jGs?si=0-f1B5hDtcWImvQv" target="_blank">
-    <img src="https://img.youtube.com/vi/UHgxZa_9jGs/maxresdefault.jpg" alt="" width="80%">
-    <br />
-    <img src="https://www.iconfinder.com/icons/317714/download/png/16" alt="YouTube" width="16"/>
-    <b>YouTubeで視聴</b>
-  </a>
-</div>
 
 ## Dockerインストール
 

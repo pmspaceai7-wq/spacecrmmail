@@ -28,13 +28,6 @@ cd /opt && git clone https://github.com/pmspaceai7-wq/spacecrmmail && cd spacecr
 cd /opt && git clone https://github.com/pmspaceai7-wq/spacecrmmail && cd spacecrmmail && cp env_init .env && docker compose up -d || docker-compose up -d
 ```
 
-<div align="center">
-  <a href="https://www.bilibili.com/video/BV1JiTNzUE5m/" target="_blank">
-    <img src="https://i1.hdslb.com/bfs/archive/9065dbdf7645fa5cadb8a34e1ae3e287481fb862.jpg" alt="" width="80%">
-    <br />
-    <b>在BiliBili上观看</b>
-  </a>
-</div>
 
 
 ## 管理脚本
