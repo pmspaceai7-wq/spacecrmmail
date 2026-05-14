@@ -1,34 +1,30 @@
 <div align="center">
   <a name="readme-top"></a>
-  <h1><a href="https://www.billionmail.com/" target="_blank">BillionMail 📧</a></h1>
-
+  <img src="https://mail.spacecrm.net/static/image/logo.ee11f2b3.png" alt="SpaceCRM Mail" width="180"/>
+  <h1><a href="https://spacecrm.net/" target="_blank">SpaceCRM Mail 📧</a></h1>
 
 ## スマートなキャンペーンのためのオープンソースメールサーバー／メールマガジン／Eメールマーケティングソリューション
 
 [![][license-shield]][license-link] [![][docs-shield]][docs-link] [![][github-release-shield]][github-release-link] [![][github-stars-shield]][github-stars-link]
 
-[English](README.md) | [简体中文](README-zh_CN.md) | 日本語 | [Türkçe](README-ja.md)
+[English](README.md) | [简体中文](README-zh_CN.md) | 日本語 | [Türkçe](README-tr.md)
 </div>
 <br/>
 
-<div align="center">
-<a href="https://trendshift.io/repositories/13842" target="_blank"><img src="https://trendshift.io/api/badge/repositories/13842" alt="aaPanel%2FBillionMail | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
-</div>
+## SpaceCRM Mail とは？
 
-## BillionMailとは？
+SpaceCRM Mail は、ビジネスや個人がメールキャンペーンを簡単に管理できるよう設計された**強力なオープンソースのメールサーバー兼Eメールマーケティングプラットフォーム**です。ニュースレター、プロモーションメール、取引通知などを送信する際に、メールマーケティングのすべてを**完全にコントロール**できます。**高度な分析機能**や**顧客管理機能**を活用し、プロフェッショナルのようにメールを作成、送信、トラッキングできます。
 
-BillionMailは、ビジネスや個人がメールキャンペーンを簡単に管理できるよう設計された**オープンソースのメールサーバー兼Eメールマーケティングプラットフォーム**です。ニュースレター、プロモーションメール、取引通知などを送信する際に、メールマーケティングのすべてを**完全にコントロール**できます。**高度な分析機能**や**顧客管理機能**を活用し、プロフェッショナルのようにメールを作成、送信、トラッキングできます。
+![SpaceCRM Mail](https://mail.spacecrm.net/static/image/logo.ee11f2b3.png)
 
-![BillionMailバナー](https://www.billionmail.com/home.png?v1)
+# たった3ステップでメールを大規模に送信！
+**強力なメールマーケティング。あらゆるビジネスに。セルフホスト。**
 
-# たった3ステップで10億通のメールを送信！
-**10億通のメール。あらゆるビジネスに。保証付き。**
-
-### Step 1️⃣ BillionMailのインストール 
+### Step 1️⃣ SpaceCRM Mail のインストール
 ✅ インストールから**8分**で**✅ メール送信成功**まで完了します
 ```shell
-cd /opt && git clone https://github.com/aaPanel/BillionMail && cd BillionMail && bash install.sh
-````
+cd /opt && git clone https://github.com/pmspaceai7-wq/spacecrmmail && cd spacecrmmail && bash install.sh
+```
 
 ### Step 2️⃣ ドメインを接続する
 
@@ -51,16 +47,12 @@ cd /opt && git clone https://github.com/aaPanel/BillionMail && cd BillionMail &&
   </a>
 </div>
 
-## その他のインストール方法
+## Dockerインストール
 
-👉 [https://www.aapanel.com/new/download.html](https://www.aapanel.com/new/download.html)
-
-### aaPanelでワンクリックインストール
-
-**Docker**
+**Docker**（Dockerとdocker-compose-pluginを手動でインストールし、.envファイルを編集してください）
 
 ```shell
-cd /opt && git clone https://github.com/aaPanel/BillionMail && cd BillionMail && cp env_init .env && docker compose up -d || docker-compose up -d
+cd /opt && git clone https://github.com/pmspaceai7-wq/spacecrmmail && cd spacecrmmail && cp env_init .env && docker compose up -d || docker-compose up -d
 ```
 
 ## 管理スクリプト
@@ -77,25 +69,17 @@ cd /opt && git clone https://github.com/aaPanel/BillionMail && cd BillionMail &&
 
   `bm show-record`
 
-* BillionMailを更新
+* SpaceCRM Mail を更新
 
   `bm update`
 
-## ライブデモ
-
-BillionMailデモ: [https://demo.billionmail.com/billionmail](https://demo.billionmail.com/billionmail)
-
-ユーザー名: `billionmail`
-
-パスワード: `billionmail`
-
 ## Webメール
 
-BillionMailには**RoundCube**が統合されており、`/roundcube/`からWebメールにアクセスできます。
+SpaceCRM Mail には**RoundCube**が統合されており、`/roundcube/`からWebメールにアクセスできます。
 
-## なぜBillionMailを選ぶのか？
+## なぜ SpaceCRM Mail を選ぶのか？
 
-ほとんどのEメールマーケティングプラットフォームは**高価**、**クローズドソース**、または**基本機能が不足**しています。BillionMailはこれらと異なります：
+ほとんどのEメールマーケティングプラットフォームは**高価**、**クローズドソース**、または**基本機能が不足**しています。SpaceCRM Mail はこれらと異なります：
 
 ✅ **完全オープンソース** – 隠れたコストなし、ベンダーロックインなし。
 📊 **高度な分析機能** – メール配信、開封率、クリック率などを追跡。
@@ -106,20 +90,20 @@ BillionMailには**RoundCube**が統合されており、`/roundcube/`からWeb�
 
 ## どうすれば貢献できるか 🌟
 
-BillionMailは**コミュニティ主導のプロジェクト**であり、立ち上げには皆さんのサポートが必要です！以下の方法でご参加ください：
+SpaceCRM Mail は**コミュニティ主導のプロジェクト**であり、皆さんのサポートが必要です！以下の方法でご参加ください：
 
 1. **このリポジトリにスターを付ける**：スターを付けて関心を示しましょう。
-2. **情報を拡散する**：開発者、マーケター、オープンソース愛好家にBillionMailを紹介しましょう。
+2. **情報を拡散する**：開発者、マーケター、オープンソース愛好家に SpaceCRM Mail を紹介しましょう。
 3. **フィードバックを共有する**：Issueを立てるかディスカッションに参加して、どんな機能がほしいか教えてください。
-4. **コントリビュートする**：開発が始まったら、コミュニティからの貢献を歓迎します。今後のアップデートをお待ちください！
+4. **コントリビュートする**：コミュニティからの貢献を歓迎します。オープンなIssueを確認して始めましょう！
 
 ---
 
-📧 **BillionMail – オープンソースEメールマーケティングの未来。**
+📧 **SpaceCRM Mail – オープンソースEメールマーケティングの未来。**
 
 ## Issues
 
-問題が発生したり機能リクエストがある場合は、[Issueを作成](https://github.com/aaPanel/BillionMail/issues)してください。以下を含めると助かります：
+問題が発生したり機能リクエストがある場合は、[Issueを作成](https://github.com/pmspaceai7-wq/spacecrmmail/issues)してください。以下を含めると助かります：
 
 * 問題またはリクエストの明確な説明
 * 再現手順（該当する場合）
@@ -130,18 +114,18 @@ BillionMailは**コミュニティ主導のプロジェクト**であり、立�
 ✅ インストールから**8分**で**メール送信成功**まで完了します
 
 ```shell
-cd /opt && git clone https://github.com/aaPanel/BillionMail && cd BillionMail && bash install.sh
+cd /opt && git clone https://github.com/pmspaceai7-wq/spacecrmmail && cd spacecrmmail && bash install.sh
 ```
 
 **Dockerでインストール:**（Dockerとdocker-compose-pluginを手動でインストールし、.envファイルを編集してください）
 
 ```shell
-cd /opt && git clone https://github.com/aaPanel/BillionMail && cd BillionMail && cp env_init .env && docker compose up -d || docker-compose up -d
+cd /opt && git clone https://github.com/pmspaceai7-wq/spacecrmmail && cd spacecrmmail && cp env_init .env && docker compose up -d || docker-compose up -d
 ```
 
 ## ライセンス
 
-BillionMailは**AGPLv3ライセンス**のもとで公開されています。これにより以下が可能です：
+SpaceCRM Mail は**AGPLv3ライセンス**のもとで公開されています。これにより以下が可能です：
 
 ✅ ソフトウェアを無料で使用する
 ✅ コードを改変・再配布する
@@ -151,18 +135,17 @@ BillionMailは**AGPLv3ライセンス**のもとで公開されています。�
 
 ---
 
-<!-- BillionMail公式リンク -->
+<!-- SpaceCRM Mail official link -->
+[docs-link]: https://spacecrm.net/
 
-[docs-link]: https://www.billionmail.com/
+<!-- SpaceCRM Mail Other links -->
+[license-link]: https://www.gnu.org/licenses/agpl-3.0.html
+[github-release-link]: https://github.com/pmspaceai7-wq/spacecrmmail/releases/latest
+[github-stars-link]: https://github.com/pmspaceai7-wq/spacecrmmail
+[github-issues-link]: https://github.com/pmspaceai7-wq/spacecrmmail/issues
 
-<!-- その他のリンク -->
-[license-link]: https://www.gnu.org/licenses/gpl-3.0.html
-[github-release-link]: https://github.com/aaPanel/BillionMail/releases/latest
-[github-stars-link]: https://github.com/aaPanel/BillionMail
-[github-issues-link]: https://github.com/aaPanel/BillionMail/issues
-
-<!-- シールドリンク -->
+<!-- Shield links -->
 [docs-shield]: https://img.shields.io/badge/documentation-148F76
-[github-release-shield]: https://img.shields.io/github/v/release/aaPanel/BillionMail
-[github-stars-shield]: https://img.shields.io/github/stars/aaPanel/BillionMail?color=%231890FF&style=flat-square
-[license-shield]: https://img.shields.io/github/license/aaPanel/BillionMail
+[github-release-shield]: https://img.shields.io/github/v/release/pmspaceai7-wq/spacecrmmail
+[github-stars-shield]: https://img.shields.io/github/stars/pmspaceai7-wq/spacecrmmail?color=%231890FF&style=flat-square
+[license-shield]: https://img.shields.io/github/license/pmspaceai7-wq/spacecrmmail
