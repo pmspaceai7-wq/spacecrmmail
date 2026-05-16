@@ -95,10 +95,10 @@ export default function CTA() {
             </Link>
 
             <Link
-              href="#"
-              className="inline-flex items-center justify-center px-8 py-4 text-base font-semibold text-white bg-white/5 border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300"
+              href="https://mail.spacecrm.net/spacecrm"
+              className="inline-flex items-center justify-center px-8 py-4 text-base font-semibold text-white bg-white/5 border border-white/20 rounded-full hover:bg-white/10 transition-all duration-300 shadow-lg hover:-translate-y-0.5"
             >
-              Schedule a Demo
+              Try It Now
             </Link>
           </div>
 

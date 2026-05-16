@@ -104,6 +104,12 @@ export default function Hero() {
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-150" />
                 </Link>
                 <Link
+                  href="https://mail.spacecrm.net/spacecrm"
+                  className="inline-flex items-center justify-center px-8 py-3.5 border border-gray-900 bg-white text-gray-900 text-sm font-semibold tracking-wide hover:bg-gray-50 transition-colors duration-150"
+                >
+                  Try It Now
+                </Link>
+                <Link
                   href="/features"
                   className="inline-flex items-center justify-center px-8 py-3.5 border border-gray-300 text-gray-700 text-sm font-semibold tracking-wide hover:border-gray-900 hover:text-gray-900 transition-colors duration-150"
                 >

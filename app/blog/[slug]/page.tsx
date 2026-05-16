@@ -217,13 +217,22 @@ export default async function BlogDetailsPage({ params }: BlogDetailsPageProps) 
                   <p className="text-xs text-gray-400 leading-relaxed mb-6">
                     See how Space CRM helps your team automate outreach across email, LinkedIn, and WhatsApp.
                   </p>
-                  <Link
-                    href="/demo"
-                    className="inline-flex items-center gap-2 text-sm font-semibold text-white border-b-2 border-white pb-0.5 hover:gap-3 transition-all duration-200"
-                  >
-                    Request a Demo
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
+                  <div className="flex flex-col gap-3">
+                    <Link
+                      href="https://mail.spacecrm.net/spacecrm"
+                      className="inline-flex items-center gap-2 text-sm font-semibold text-white border-b-2 border-white/30 hover:border-white pb-0.5 transition-all duration-200 w-fit"
+                    >
+                      Try It Now
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
+                    <Link
+                      href="/demo"
+                      className="inline-flex items-center gap-2 text-sm font-semibold text-white border-b-2 border-white/30 hover:border-white pb-0.5 transition-all duration-200 w-fit"
+                    >
+                      Request a Demo
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
+                  </div>
                 </div>
               </aside>
             </div>
@@ -304,12 +313,20 @@ export default async function BlogDetailsPage({ params }: BlogDetailsPageProps) 
                 See how Space CRM puts these playbooks into practice for your revenue team.
               </p>
             </div>
-            <Link
-              href="/demo"
-              className="px-10 py-4 bg-gray-900 text-white text-sm font-semibold tracking-wide hover:bg-gray-700 transition-colors duration-150 shrink-0 text-center"
-            >
-              Book a Demo →
-            </Link>
+            <div className="flex flex-col sm:flex-row gap-3 shrink-0">
+              <Link
+                href="https://mail.spacecrm.net/spacecrm"
+                className="px-10 py-4 border border-gray-900 text-gray-900 text-sm font-semibold tracking-wide hover:bg-gray-50 transition-colors duration-150 text-center"
+              >
+                Try It Now →
+              </Link>
+              <Link
+                href="/demo"
+                className="px-10 py-4 bg-gray-900 text-white text-sm font-semibold tracking-wide hover:bg-gray-700 transition-colors duration-150 text-center"
+              >
+                Book a Demo →
+              </Link>
+            </div>
           </div>
         </div>
       </section>

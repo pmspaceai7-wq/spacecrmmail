@@ -174,12 +174,20 @@ export default async function IndustryPage({ params }: PageProps) {
               </p>
             </div>
 
-            <Link
-              href="/demo"
-              className="px-10 py-4 bg-gray-900 text-white text-sm font-semibold hover:bg-gray-700 transition"
-            >
-              Book a Demo →
-            </Link>
+            <div className="flex flex-col sm:flex-row gap-3 shrink-0">
+              <Link
+                href="https://mail.spacecrm.net/spacecrm"
+                className="px-10 py-4 border border-gray-900 text-gray-900 text-sm font-semibold tracking-wide hover:bg-gray-50 transition-colors duration-150 text-center"
+              >
+                Try It Now →
+              </Link>
+              <Link
+                href="/demo"
+                className="px-10 py-4 bg-gray-900 text-white text-sm font-semibold tracking-wide hover:bg-gray-700 transition-colors duration-150 text-center"
+              >
+                Book a Demo →
+              </Link>
+            </div>
           </div>
         </div>
       </section>

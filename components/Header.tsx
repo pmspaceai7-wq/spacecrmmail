@@ -30,12 +30,12 @@ export default function Header() {
           isScrolled ? "border-b border-gray-200" : "border-b border-transparent"
         }`}
       >
-        <nav className="max-w-6xl mx-auto px-6 lg:px-12">
+        <nav className="max-w-7xl mx-auto px-4 lg:px-8">
           <div className="flex items-center justify-between h-16 md:h-20">
 
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-2.5 group">
-              <div className="relative w-8 h-8">
+            <Link href="/" className="flex items-center gap-2 group shrink-0">
+              <div className="relative w-7 h-7">
                 <Image
                   src="/icononly_transparent_nobuffer.png"
                   alt="Space CRM Logo"
@@ -43,28 +43,28 @@ export default function Header() {
                   className="object-contain"
                 />
               </div>
-              <span className="text-base font-black tracking-tight text-gray-900 uppercase">
+              <span className="text-sm font-black tracking-tighter text-gray-900 uppercase">
                 Space CRM
               </span>
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden lg:flex items-center gap-8">
+            <div className="hidden lg:flex items-center gap-5 xl:gap-6">
               <Link
                 href="/industries"
-                className="text-xs font-mono tracking-[0.15em] uppercase text-gray-400 hover:text-gray-900 transition-colors duration-150"
+                className="text-[10px] xl:text-xs font-mono tracking-[0.1em] uppercase text-gray-400 hover:text-gray-900 transition-colors duration-150"
               >
                 Industries
               </Link>
               <Link
                 href="/about"
-                className="text-xs font-mono tracking-[0.15em] uppercase text-gray-400 hover:text-gray-900 transition-colors duration-150"
+                className="text-[10px] xl:text-xs font-mono tracking-[0.1em] uppercase text-gray-400 hover:text-gray-900 transition-colors duration-150"
               >
                 About
               </Link>
               <Link
                 href="/blog"
-                className="text-xs font-mono tracking-[0.15em] uppercase text-gray-400 hover:text-gray-900 transition-colors duration-150"
+                className="text-[10px] xl:text-xs font-mono tracking-[0.1em] uppercase text-gray-400 hover:text-gray-900 transition-colors duration-150"
               >
                 Blog
               </Link>
@@ -72,7 +72,7 @@ export default function Header() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-xs font-mono tracking-[0.15em] uppercase text-gray-400 hover:text-gray-900 transition-colors duration-150"
+                  className="text-[10px] xl:text-xs font-mono tracking-[0.1em] uppercase text-gray-400 hover:text-gray-900 transition-colors duration-150"
                 >
                   {link.label}
                 </Link>
@@ -80,10 +80,16 @@ export default function Header() {
             </div>
 
             {/* CTA */}
-            <div className="hidden lg:flex items-center">
+            <div className="hidden lg:flex items-center gap-2 xl:gap-3">
+              <Link
+                href="https://mail.spacecrm.net/spacecrm"
+                className="px-4 py-2 border border-gray-900 text-gray-900 text-[10px] xl:text-xs font-mono tracking-[0.1em] uppercase hover:bg-gray-50 transition-colors duration-150 whitespace-nowrap"
+              >
+                Try It Now
+              </Link>
               <Link
                 href="/demo"
-                className="px-6 py-2.5 bg-gray-900 text-white text-xs font-mono tracking-[0.15em] uppercase hover:bg-gray-700 transition-colors duration-150"
+                className="px-4 py-2 bg-gray-900 text-white text-[10px] xl:text-xs font-mono tracking-[0.1em] uppercase hover:bg-gray-700 transition-colors duration-150 whitespace-nowrap"
               >
                 Request a Demo
               </Link>
@@ -134,7 +140,14 @@ export default function Header() {
                     ))}
                   </div>
 
-                  <div className="pt-6">
+                  <div className="pt-6 space-y-3">
+                    <Link
+                      href="https://mail.spacecrm.net/spacecrm"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="block w-full text-center px-6 py-3 border border-gray-900 text-gray-900 text-xs font-mono tracking-[0.15em] uppercase hover:bg-gray-50 transition-colors duration-150"
+                    >
+                      Try It Now
+                    </Link>
                     <Link
                       href="/demo"
                       onClick={() => setIsMobileMenuOpen(false)}
