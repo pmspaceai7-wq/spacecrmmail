@@ -86,7 +86,7 @@ export default function ApiPage() {
         <div className="max-w-6xl mx-auto px-6 lg:px-12 py-16">
           <div className="text-center max-w-3xl mx-auto">
             <p className="text-xs font-mono tracking-[0.2em] uppercase text-gray-400 mb-6">
-              Developer Resources
+              Developer Resources.
             </p>
             <h1 className="text-4xl md:text-6xl font-thin font-black tracking-tight leading-[0.95] text-gray-900 mb-6">
               API Documentation
