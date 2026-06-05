@@ -24,7 +24,10 @@ func init() {
 				PRIMARY KEY (domain)
 			)`,
 
-			`--  mailbox 
+			`-- Add account_id to domain for per-user ownership (safe to run on existing tables)
+			ALTER TABLE domain ADD COLUMN IF NOT EXISTS account_id INT REFERENCES account(account_id) ON DELETE SET NULL`,
+
+			`--  mailbox
 			CREATE TABLE IF NOT EXISTS mailbox (
 				username varchar(255) NOT NULL,
 				password varchar(255) NOT NULL,

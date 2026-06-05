@@ -14,6 +14,7 @@ export default defineStore(
 			refresh_token: '', // Refresh Token
 			ttl: 0, // Token valid time/second
 			expire: 0, // Token expiration time
+			roles: [] as string[], // User roles
 		})
 
 		/**
@@ -24,14 +25,24 @@ export default defineStore(
 		})
 
 		/**
+		 * @description Determine if the user is an admin
+		 */
+		const isAdmin = computed(() => {
+			return login.value.roles.includes('admin')
+		})
+
+		/**
 		 * @description Set user login information
 		 * @param userVal
 		 */
-		const setLoginInfo = (userVal: { token: string; refresh_token: string; ttl: number }) => {
+		const setLoginInfo = (userVal: { token: string; refresh_token: string; ttl: number; roles?: string[] }) => {
 			login.value.token = userVal.token
 			login.value.refresh_token = userVal.refresh_token
 			login.value.ttl = userVal.ttl
 			login.value.expire = userVal.ttl * 1000 + Date.now()
+			if (userVal.roles !== undefined) {
+				login.value.roles = userVal.roles
+			}
 		}
 
 		const resetLoginInfo = () => {
@@ -39,6 +50,7 @@ export default defineStore(
 			login.value.refresh_token = ''
 			login.value.ttl = 0
 			login.value.expire = 0
+			login.value.roles = []
 		}
 
 		const logout = () => {
@@ -56,6 +68,7 @@ export default defineStore(
 		return {
 			login,
 			isLogin,
+			isAdmin,
 			logout,
 			setLoginInfo,
 			resetLoginInfo,

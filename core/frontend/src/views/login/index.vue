@@ -54,6 +54,44 @@
 						{{ t('login.form.loginButton') }}
 					</n-button>
 				</n-form-item>
+
+				<n-divider class="oauth-divider">{{ t('login.form.orContinueWith') }}</n-divider>
+
+				<div class="oauth-buttons">
+					<n-button
+						class="oauth-btn"
+						size="large"
+						:loading="oauthLoading === 'google'"
+						:disabled="oauthLoading !== null"
+						@click="handleOAuth('google')">
+						<template #icon>
+							<svg width="18" height="18" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<path d="M47.532 24.552c0-1.636-.138-3.2-.395-4.704H24v8.92h13.222c-.57 3.067-2.302 5.664-4.908 7.41v6.158h7.944c4.645-4.28 7.274-10.586 7.274-17.784z" fill="#4285F4"/>
+								<path d="M24 48c6.624 0 12.182-2.196 16.242-5.948l-7.944-6.158c-2.196 1.472-5.004 2.34-8.298 2.34-6.384 0-11.79-4.31-13.722-10.104H2.08v6.364C6.116 42.892 14.484 48 24 48z" fill="#34A853"/>
+								<path d="M10.278 28.13A14.96 14.96 0 0 1 9.454 24c0-1.432.246-2.824.824-4.13V13.506H2.08A23.97 23.97 0 0 0 0 24c0 3.874.924 7.536 2.08 10.494l8.198-6.364z" fill="#FBBC05"/>
+								<path d="M24 9.538c3.6 0 6.828 1.238 9.372 3.668l7.026-7.026C36.178 2.196 30.624 0 24 0 14.484 0 6.116 5.108 2.08 13.506l8.198 6.364C12.21 13.848 17.616 9.538 24 9.538z" fill="#EA4335"/>
+							</svg>
+						</template>
+						{{ t('login.form.continueWithGoogle') }}
+					</n-button>
+
+					<n-button
+						class="oauth-btn"
+						size="large"
+						:loading="oauthLoading === 'microsoft'"
+						:disabled="oauthLoading !== null"
+						@click="handleOAuth('microsoft')">
+						<template #icon>
+							<svg width="18" height="18" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<rect x="1" y="1" width="9" height="9" fill="#F25022"/>
+								<rect x="11" y="1" width="9" height="9" fill="#7FBA00"/>
+								<rect x="1" y="11" width="9" height="9" fill="#00A4EF"/>
+								<rect x="11" y="11" width="9" height="9" fill="#FFB900"/>
+							</svg>
+						</template>
+						{{ t('login.form.continueWithMicrosoft') }}
+					</n-button>
+				</div>
 			</n-form>
 		</div>
 	</div>
@@ -62,7 +100,7 @@
 <script lang="ts" setup>
 import { useUserStore } from '@/store'
 import { isObject } from '@/utils'
-import { getValidateCode, login } from '@/api/modules/user'
+import { getValidateCode, login, oauthInitiate, getCurrentUser } from '@/api/modules/user'
 
 const { t } = useI18n()
 
@@ -132,6 +170,10 @@ interface LoginResponse {
 	ttl: number
 }
 
+interface CurrentUserResponse {
+	roles: string[]
+}
+
 const handleLogin = async () => {
 	try {
 		await formRef.value?.validate()
@@ -143,6 +185,16 @@ const handleLogin = async () => {
 				refresh_token: res.refresh_token,
 				ttl: res.ttl,
 			})
+			// Fetch roles so sidebar filtering works immediately
+			const userRes = await getCurrentUser()
+			if (isObject<CurrentUserResponse>(userRes)) {
+				userStore.setLoginInfo({
+					token: res.token,
+					refresh_token: res.refresh_token,
+					ttl: res.ttl,
+					roles: userRes.roles,
+				})
+			}
 			setTimeout(() => {
 				router.push('/')
 			}, 1000)
@@ -151,6 +203,20 @@ const handleLogin = async () => {
 		getCode()
 	} finally {
 		loading.value = false
+	}
+}
+
+const oauthLoading = ref<string | null>(null)
+
+const handleOAuth = async (provider: string) => {
+	oauthLoading.value = provider
+	try {
+		const res = await oauthInitiate(provider)
+		if (isObject<{ redirectUrl: string }>(res)) {
+			window.location.href = res.redirectUrl
+		}
+	} catch {
+		oauthLoading.value = null
 	}
 }
 
@@ -247,5 +313,21 @@ getCode()
 	border: 1px solid #dcdfe6;
 	overflow: hidden;
 	cursor: pointer;
+}
+
+.oauth-divider {
+	margin: 16px 0 12px;
+}
+
+.oauth-buttons {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	width: 100%;
+}
+
+.oauth-btn {
+	width: 100%;
+	justify-content: center;
 }
 </style>

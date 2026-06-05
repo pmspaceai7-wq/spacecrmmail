@@ -11,6 +11,8 @@ type IAccount interface {
 	GetList(ctx context.Context, page, pageSize int, username, email string, status int) ([]model.Account, int, error)
 	// Get account by ID
 	GetById(ctx context.Context, accountId int64) (*model.Account, error)
+	// Get account by email
+	GetByEmail(ctx context.Context, email string) (*model.Account, error)
 	// Create account
 	Create(ctx context.Context, accountData *model.Account) (int64, error)
 	// Update account

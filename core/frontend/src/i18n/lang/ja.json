@@ -114,7 +114,10 @@
 			"loginButton": "ログイン",
 			"captchaPlaceholder": "認証コード",
 			"changeCaptcha": "クリックして変更",
-			"captcha": "認証コード"
+			"captcha": "認証コード",
+			"orContinueWith": "または以下で続ける",
+			"continueWithGoogle": "Google でログイン",
+			"continueWithMicrosoft": "Microsoft でログイン"
 		},
 		"validation": {
 			"usernameRequired": "ユーザー名を入力してください！",

@@ -75,24 +75,63 @@ type GetValidateCodeRes struct {
 	} `json:"data"`
 }
 
-//// CurrentUserReq defines the request for getting current user info
-//type CurrentUserReq struct {
-//	g.Meta        `path:"/current-user" method:"get" tags:"Authentication" summary:"Get current user info" sm:"Get current user info" in:"query"`
-//	Authorization string `json:"authorization" dc:"Authorization" in:"header"`
-//}
-//
-//// CurrentUserRes defines the response for getting current user info
-//type CurrentUserRes struct {
-//	api_v1.StandardRes
-//	Data struct {
-//		Account struct {
-//			Id       int64  `json:"id" dc:"Account ID"`
-//			Username string `json:"username" dc:"Username"`
-//			Email    string `json:"email" dc:"Email address"`
-//			Status   int    `json:"status" dc:"Account status"`
-//			Lang     string `json:"lang" dc:"Preferred language"`
-//		} `json:"account" dc:"Account information"`
-//		Roles       []string `json:"roles" dc:"User roles"`
-//		Permissions []string `json:"permissions" dc:"User permissions"`
-//	} `json:"data"`
-//}
+// CurrentUserReq defines the request for getting current user info
+type CurrentUserReq struct {
+	g.Meta        `path:"/current-user" method:"get" tags:"Authentication" summary:"Get current user info" sm:"Get current user info" in:"query"`
+	Authorization string `json:"authorization" dc:"Authorization" in:"header"`
+}
+
+// CurrentUserRes defines the response for getting current user info
+type CurrentUserRes struct {
+	api_v1.StandardRes
+	Data struct {
+		Account struct {
+			Id       int64  `json:"id" dc:"Account ID"`
+			Username string `json:"username" dc:"Username"`
+			Email    string `json:"email" dc:"Email address"`
+			Status   int    `json:"status" dc:"Account status"`
+			Lang     string `json:"lang" dc:"Preferred language"`
+		} `json:"account" dc:"Account information"`
+		Roles       []string `json:"roles" dc:"User roles"`
+		Permissions []string `json:"permissions" dc:"User permissions"`
+	} `json:"data"`
+}
+
+// OAuthInitiateReq starts the OAuth authorization flow
+type OAuthInitiateReq struct {
+	g.Meta   `path:"/oauth/initiate" method:"get" tags:"Authentication" summary:"Initiate OAuth login" sm:"Initiate OAuth login" in:"query"`
+	Provider string `p:"provider" v:"required|in:google,microsoft#Provider is required|Unsupported provider" dc:"OAuth provider (google or microsoft)"`
+}
+
+// OAuthInitiateRes returns the redirect URL to the provider
+type OAuthInitiateRes struct {
+	api_v1.StandardRes
+	Data struct {
+		RedirectURL string `json:"redirectUrl" dc:"OAuth provider authorization URL"`
+	} `json:"data"`
+}
+
+// OAuthCallbackReq handles the provider redirect callback
+type OAuthCallbackReq struct {
+	g.Meta   `path:"/oauth/callback" method:"get" tags:"Authentication" summary:"OAuth callback" sm:"OAuth callback" in:"query"`
+	Provider string `p:"provider" v:"required" dc:"OAuth provider"`
+	Code     string `p:"code" v:"required" dc:"Authorization code from provider"`
+	State    string `p:"state" v:"required" dc:"CSRF state token"`
+}
+
+// OAuthCallbackRes — handler redirects on success; this is only returned on error
+type OAuthCallbackRes struct {
+	api_v1.StandardRes
+}
+
+// OAuthCallbackMicrosoftReq handles Microsoft's path-based redirect (Azure forbids query strings)
+type OAuthCallbackMicrosoftReq struct {
+	g.Meta `path:"/oauth/callback/microsoft" method:"get" tags:"Authentication" summary:"Microsoft OAuth callback" sm:"Microsoft OAuth callback" in:"query"`
+	Code   string `p:"code" v:"required" dc:"Authorization code from Microsoft"`
+	State  string `p:"state" v:"required" dc:"CSRF state token"`
+}
+
+// OAuthCallbackMicrosoftRes — handler redirects on success; this is only returned on error
+type OAuthCallbackMicrosoftRes struct {
+	api_v1.StandardRes
+}

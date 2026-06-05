@@ -5,7 +5,7 @@ const route: RouteRecordRaw = {
 	path: '/settings',
 	name: 'SettingsLayout',
 	redirect: '/settings/common',
-	meta: { sort: 9, key: 'settings', title: 'Settings', titleKey: 'layout.menu.settings' },
+	meta: { sort: 9, key: 'settings', title: 'Settings', titleKey: 'layout.menu.settings', adminOnly: true },
 	component: Layout,
 	children: [
 		{
@@ -50,6 +50,12 @@ const route: RouteRecordRaw = {
 					name: 'SendQueue',
 					meta: { title: 'Send Queue', titleKey: '' },
 					component: () => import('@/views/settings/send-queue/index.vue'),
+				},
+				{
+					path: 'accounts',
+					name: 'SettingsAccounts',
+					meta: { title: 'Accounts', titleKey: 'layout.menu.accounts' },
+					component: () => import('@/views/settings/accounts/index.vue'),
 				},
 			],
 		},

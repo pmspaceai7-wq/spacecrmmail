@@ -48,6 +48,16 @@ func (s *accountService) GetList(ctx context.Context, page, pageSize int, userna
 	return accounts, total, nil
 }
 
+// GetByEmail gets an account by email address
+func (s *accountService) GetByEmail(ctx context.Context, email string) (*model.Account, error) {
+	var account model.Account
+	err := g.DB().Model("account").Where("email = ?", email).Scan(&account)
+	if err != nil {
+		return nil, err
+	}
+	return &account, nil
+}
+
 // GetById gets account details by ID
 func (s *accountService) GetById(ctx context.Context, accountId int64) (*model.Account, error) {
 	var account model.Account

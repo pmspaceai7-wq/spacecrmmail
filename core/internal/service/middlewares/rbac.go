@@ -84,7 +84,11 @@ func (m *RBACMiddleware) PermissionCheck(r *ghttp.Request) {
 		r.URL.Path == "/api/batch_mail/api/send" ||
 		r.URL.Path == "/api/batch_mail/api/batch_send" ||
 		r.URL.Path == "/api/subscribe/submit" ||
-		r.URL.Path == "/api/subscribe/confirm" {
+		r.URL.Path == "/api/subscribe/confirm" ||
+		r.URL.Path == "/api/oauth/initiate" ||
+		r.URL.Path == "/api/oauth/callback" ||
+		r.URL.Path == "/api/oauth/callback/microsoft" ||
+		r.URL.Path == "/api/current-user" {
 		r.Middleware.Next()
 		return
 	}

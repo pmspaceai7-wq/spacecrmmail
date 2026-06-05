@@ -112,7 +112,8 @@
 			"sequences": "Sequences",
 			"leads": "Leads",
 			"enrichment": "Enrichment",
-			"videoOutreach": "Video Outreach"
+			"videoOutreach": "Video Outreach",
+			"accounts": "Accounts"
 		}
 	},
 	"login": {
@@ -123,7 +124,10 @@
 			"loginButton": "Login",
 			"captchaPlaceholder": "Verification code",
 			"changeCaptcha": "Click to change",
-			"captcha": "Verification code"
+			"captcha": "Verification code",
+			"orContinueWith": "Or continue with",
+			"continueWithGoogle": "Continue with Google",
+			"continueWithMicrosoft": "Continue with Microsoft"
 		},
 		"validation": {
 			"usernameRequired": "Username cannot be empty!",
@@ -1597,6 +1601,20 @@
 			"updating": "Updating, please wait...",
 			"deleting": "Deleting, please wait...",
 			"testing": "Testing, please wait..."
+		},
+		"accounts": {
+			"title": "User Accounts",
+			"createAccount": "Create Account",
+			"editAccount": "Edit Account",
+			"resetPassword": "Reset Password",
+			"form": {
+				"username": "Username",
+				"password": "Password",
+				"email": "Email",
+				"roles": "Roles",
+				"status": "Status",
+				"newPassword": "New Password"
+			}
 		}
 	},
 	"sequences": {

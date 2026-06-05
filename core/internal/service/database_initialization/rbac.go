@@ -71,6 +71,20 @@ func init() {
 				FOREIGN KEY (role_id) REFERENCES role(role_id) ON DELETE CASCADE,
 				FOREIGN KEY (permission_id) REFERENCES permission(permission_id) ON DELETE CASCADE
 			)`,
+
+			// OAuth provider links table
+			`CREATE TABLE IF NOT EXISTS account_oauth (
+				id SERIAL PRIMARY KEY,
+				account_id INT NOT NULL,
+				provider VARCHAR(32) NOT NULL,
+				provider_uid VARCHAR(255) NOT NULL,
+				email VARCHAR(255) NOT NULL DEFAULT '',
+				name VARCHAR(255) NOT NULL DEFAULT '',
+				create_time INT NOT NULL DEFAULT EXTRACT(EPOCH FROM NOW()),
+				update_time INT NOT NULL DEFAULT EXTRACT(EPOCH FROM NOW()),
+				UNIQUE(provider, provider_uid),
+				FOREIGN KEY (account_id) REFERENCES account(account_id) ON DELETE CASCADE
+			)`,
 		}
 
 		// Execute SQL statements
@@ -163,6 +177,15 @@ func init() {
 			if err != nil {
 				g.Log().Error(context.Background(), "Failed to update admin account:", err)
 				return
+			}
+		}
+
+		// Create viewer role if it doesn't exist (default role for OAuth users)
+		viewerRoleIdVal, _ := g.DB().Model("role").Where("role_name = ?", "viewer").Value("role_id")
+		if viewerRoleIdVal == nil {
+			_, err = rbac.Role().Create(context.Background(), "viewer", "Default read-only role for OAuth users", 1)
+			if err != nil {
+				g.Log().Warning(context.Background(), "Failed to create viewer role:", err)
 			}
 		}
 

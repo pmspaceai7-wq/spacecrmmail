@@ -16,3 +16,6 @@ type AccountRole entity.AccountRole
 
 // RolePermission defines the role-permission relationship model
 type RolePermission entity.RolePermission
+
+// AccountOAuth defines the OAuth provider link model
+type AccountOAuth entity.AccountOAuth
