@@ -4,6 +4,7 @@ import (
 	"billionmail-core/api/operation_log/v1"
 	"billionmail-core/internal/model/entity"
 	"billionmail-core/internal/service/public"
+	rbac "billionmail-core/internal/service/rbac"
 	"context"
 	"github.com/gogf/gf/v2/frame/g"
 	"strconv"
@@ -13,8 +14,24 @@ import (
 func (c *ControllerV1) GetOperationLog(ctx context.Context, req *v1.GetOperationLogReq) (res *v1.GetOperationLogRes, err error) {
 	res = &v1.GetOperationLogRes{}
 
+	// Determine if current user is admin
+	currentAccountId := public.GetCurrentAccountId(ctx)
+	roles, _ := rbac.Account().GetAccountRoles(ctx, currentAccountId)
+	isAdmin := false
+	for _, r := range roles {
+		if r.RoleName == "admin" {
+			isAdmin = true
+			break
+		}
+	}
+
 	// build query conditions
 	model := g.DB().Model("bm_operation_logs").Safe()
+
+	// Non-admins can only see their own log entries
+	if !isAdmin {
+		model = model.Where("user_id = ?", currentAccountId)
+	}
 
 	// add keyword fuzzy search (log, ip fields)
 	if req.Keyword != "" {

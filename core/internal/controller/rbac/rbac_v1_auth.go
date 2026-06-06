@@ -221,62 +221,221 @@ func (c *ControllerV1) RefreshToken(ctx context.Context, req *v1.RefreshTokenReq
 	return
 }
 
-//// CurrentUser retrieves the current logged-in user information
-//func (c *ControllerV1) CurrentUser(ctx context.Context, req *v1.CurrentUserReq) (res *v1.CurrentUserRes, err error) {
-//	res = &v1.CurrentUserRes{}
-//
-//	// Get account ID from context
-//	accountId := service.GetCurrentAccountId(ctx)
-//	if accountId == 0 {
-//		err = gerror.New("Unauthorized")
-//		return
-//	}
-//
-//	// Get account details
-//	account, err := service.Account().GetById(ctx, accountId)
-//	if err != nil {
-//		err = gerror.New("Failed to get account details")
-//		return
-//	}
-//
-//	// Get account roles
-//	roles, err := service.Account().GetAccountRoles(ctx, accountId)
-//	if err != nil {
-//		err = gerror.New("Failed to get account roles")
-//		return
-//	}
-//
-//	// Get account permissions
-//	permissions, err := service.Account().GetAccountPermissions(ctx, accountId)
-//	if err != nil {
-//		err = gerror.New("Failed to get account permissions")
-//		return
-//	}
-//
-//	// Prepare response
-//	res.Success = true
-//	res.Code = 0
-//	res.Msg = "Retrieved successfully"
-//
-//	// Set account information
-//	res.Data.Account.Id = account.AccountId
-//	res.Data.Account.Username = account.Username
-//	res.Data.Account.Email = account.Email
-//	res.Data.Account.Status = account.Status
-//	res.Data.Account.Lang = account.Language
-//
-//	// Set roles
-//	res.Data.Roles = make([]string, 0, len(roles))
-//	for _, role := range roles {
-//		res.Data.Roles = append(res.Data.Roles, role.RoleName)
-//	}
-//
-//	// Set permissions
-//	res.Data.Permissions = make([]string, 0, len(permissions))
-//	for _, perm := range permissions {
-//		permStr := perm.Module + ":" + perm.Action + ":" + perm.Resource
-//		res.Data.Permissions = append(res.Data.Permissions, permStr)
-//	}
-//
-//	return
-//}
+// CurrentUser retrieves the current logged-in user information
+func (c *ControllerV1) CurrentUser(ctx context.Context, req *v1.CurrentUserReq) (res *v1.CurrentUserRes, err error) {
+	res = &v1.CurrentUserRes{}
+
+	// Get account ID from context
+	accountId := service.GetCurrentAccountId(ctx)
+	if accountId == 0 {
+		err = gerror.New("Unauthorized")
+		return
+	}
+
+	// Get account details
+	account, err := service.Account().GetById(ctx, accountId)
+	if err != nil {
+		err = gerror.New("Failed to get account details")
+		return
+	}
+
+	// Get account roles
+	roles, err := service.Account().GetAccountRoles(ctx, accountId)
+	if err != nil {
+		err = gerror.New("Failed to get account roles")
+		return
+	}
+
+	// Get account permissions
+	permissions, err := service.Account().GetAccountPermissions(ctx, accountId)
+	if err != nil {
+		err = gerror.New("Failed to get account permissions")
+		return
+	}
+
+	// Prepare response
+	res.Success = true
+	res.Code = 0
+	res.Msg = "Retrieved successfully"
+
+	// Set account information
+	res.Data.Account.Id = account.AccountId
+	res.Data.Account.Username = account.Username
+	res.Data.Account.Email = account.Email
+	res.Data.Account.Status = account.Status
+	res.Data.Account.Lang = account.Language
+
+	// Set roles
+	res.Data.Roles = make([]string, 0, len(roles))
+	for _, role := range roles {
+		res.Data.Roles = append(res.Data.Roles, role.RoleName)
+	}
+
+	// Set permissions
+	res.Data.Permissions = make([]string, 0, len(permissions))
+	for _, perm := range permissions {
+		permStr := perm.Module + ":" + perm.Action + ":" + perm.Resource
+		res.Data.Permissions = append(res.Data.Permissions, permStr)
+	}
+
+	return
+}
+
+// OAuthInitiate starts the OAuth flow by returning the provider authorization URL
+func (c *ControllerV1) OAuthInitiate(ctx context.Context, req *v1.OAuthInitiateReq) (res *v1.OAuthInitiateRes, err error) {
+	res = &v1.OAuthInitiateRes{}
+
+	state, err := service.OAuth().GenerateState(ctx)
+	if err != nil {
+		err = gerror.New("Failed to initiate OAuth flow")
+		return
+	}
+
+	redirectURL := service.OAuth().BuildAuthURL(req.Provider, state)
+	if redirectURL == "" {
+		err = gerror.New("Unsupported OAuth provider")
+		return
+	}
+
+	res.Success = true
+	res.Code = 0
+	res.Msg = "OAuth initiated"
+	res.Data.RedirectURL = redirectURL
+	return
+}
+
+// OAuthCallback handles the provider redirect, exchanges the code, and issues a JWT.
+// On success it redirects the browser to the frontend callback page with token params.
+func (c *ControllerV1) OAuthCallback(ctx context.Context, req *v1.OAuthCallbackReq) (res *v1.OAuthCallbackRes, err error) {
+	res = &v1.OAuthCallbackRes{}
+
+	r := g.RequestFromCtx(ctx)
+
+	respondError := func(msg string) {
+		r.Response.RedirectTo("/oauth/callback?error=" + msg)
+	}
+
+	// Validate CSRF state (single-use, consumed from Redis)
+	if !service.OAuth().ValidateState(ctx, req.State) {
+		respondError("invalid_state")
+		return
+	}
+
+	// Exchange code for user info
+	providerUid, email, name, exchangeErr := service.OAuth().ExchangeAndFetchUser(ctx, req.Provider, req.Code)
+	if exchangeErr != nil {
+		g.Log().Warning(ctx, "OAuth exchange failed:", exchangeErr)
+		respondError("exchange_failed")
+		return
+	}
+
+	// Find or create account
+	account, accountErr := service.OAuth().FindOrCreateAccount(ctx, req.Provider, providerUid, email, name)
+	if accountErr != nil {
+		g.Log().Warning(ctx, "OAuth account lookup/creation failed:", accountErr)
+		respondError("account_error")
+		return
+	}
+
+	if account.Status != 1 {
+		respondError("account_disabled")
+		return
+	}
+
+	// Get roles for JWT claims
+	roles, rolesErr := service.Account().GetAccountRoles(ctx, account.AccountId)
+	if rolesErr != nil {
+		respondError("roles_error")
+		return
+	}
+	roleNames := make([]string, 0, len(roles))
+	for _, role := range roles {
+		roleNames = append(roleNames, role.RoleName)
+	}
+
+	// Generate tokens
+	token, _, tokenErr := service.JWT().GenerateToken(account.AccountId, account.Username, roleNames)
+	if tokenErr != nil {
+		respondError("token_error")
+		return
+	}
+	refreshToken, refreshErr := service.JWT().GenerateRefreshToken(account.AccountId, account.Username)
+	if refreshErr != nil {
+		respondError("token_error")
+		return
+	}
+
+	ttl := gconv.Int64(service.JWT().AccessExpiry.Seconds())
+
+	// Redirect to frontend callback page with tokens in query params
+	r.Response.RedirectTo(fmt.Sprintf(
+		"/oauth/callback?token=%s&refreshToken=%s&ttl=%d",
+		token, refreshToken, ttl,
+	))
+	return
+}
+
+// OAuthCallbackMicrosoft handles Microsoft's path-based redirect callback.
+// Azure does not allow query strings in redirect URIs, so Microsoft uses
+// /api/oauth/callback/microsoft instead of /api/oauth/callback?provider=microsoft.
+func (c *ControllerV1) OAuthCallbackMicrosoft(ctx context.Context, req *v1.OAuthCallbackMicrosoftReq) (res *v1.OAuthCallbackMicrosoftRes, err error) {
+	res = &v1.OAuthCallbackMicrosoftRes{}
+
+	r := g.RequestFromCtx(ctx)
+
+	respondError := func(msg string) {
+		r.Response.RedirectTo("/oauth/callback?error=" + msg)
+	}
+
+	if !service.OAuth().ValidateState(ctx, req.State) {
+		respondError("invalid_state")
+		return
+	}
+
+	providerUid, email, name, exchangeErr := service.OAuth().ExchangeAndFetchUser(ctx, "microsoft", req.Code)
+	if exchangeErr != nil {
+		g.Log().Warning(ctx, "Microsoft OAuth exchange failed:", exchangeErr)
+		respondError("exchange_failed")
+		return
+	}
+
+	account, accountErr := service.OAuth().FindOrCreateAccount(ctx, "microsoft", providerUid, email, name)
+	if accountErr != nil {
+		g.Log().Warning(ctx, "Microsoft OAuth account error:", accountErr)
+		respondError("account_error")
+		return
+	}
+
+	if account.Status != 1 {
+		respondError("account_disabled")
+		return
+	}
+
+	roles, rolesErr := service.Account().GetAccountRoles(ctx, account.AccountId)
+	if rolesErr != nil {
+		respondError("roles_error")
+		return
+	}
+	roleNames := make([]string, 0, len(roles))
+	for _, role := range roles {
+		roleNames = append(roleNames, role.RoleName)
+	}
+
+	token, _, tokenErr := service.JWT().GenerateToken(account.AccountId, account.Username, roleNames)
+	if tokenErr != nil {
+		respondError("token_error")
+		return
+	}
+	refreshToken, refreshErr := service.JWT().GenerateRefreshToken(account.AccountId, account.Username)
+	if refreshErr != nil {
+		respondError("token_error")
+		return
+	}
+
+	ttl := gconv.Int64(service.JWT().AccessExpiry.Seconds())
+	r.Response.RedirectTo(fmt.Sprintf(
+		"/oauth/callback?token=%s&refreshToken=%s&ttl=%d",
+		token, refreshToken, ttl,
+	))
+	return
+}

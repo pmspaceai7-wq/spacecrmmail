@@ -11,6 +11,7 @@ import (
 	"billionmail-core/internal/service/mail_service"
 	"billionmail-core/internal/service/multi_ip_domain"
 	"billionmail-core/internal/service/public"
+	rbac "billionmail-core/internal/service/rbac"
 	"context"
 	"database/sql"
 	"fmt"
@@ -86,9 +87,29 @@ func setCatchall(ctx context.Context, domainName, catchall string) error {
 	return nil
 }
 
+// isAdminCtx returns true if the account in ctx has the admin role
+func isAdminCtx(ctx context.Context) bool {
+	accountId := rbac.GetCurrentAccountId(ctx)
+	if accountId == 0 {
+		return false
+	}
+	roles, err := rbac.Account().GetAccountRoles(ctx, accountId)
+	if err != nil {
+		return false
+	}
+	for _, r := range roles {
+		if r.RoleName == "admin" {
+			return true
+		}
+	}
+	return false
+}
+
 func Add(ctx context.Context, domain *v1.Domain) error {
 	domain.CreateTime = time.Now().Unix()
 	domain.Active = 1
+	// Stamp owner so non-admins can only see their own domain later
+	domain.AccountId = rbac.GetCurrentAccountId(ctx)
 
 	_, err := g.DB().Model("domain").Ctx(ctx).Insert(domain)
 
@@ -169,10 +190,12 @@ func Update(ctx context.Context, updateData map[string]interface{}) error {
 }
 
 func Delete(ctx context.Context, domainName string) error {
-	_, err := g.DB().Model("domain").
-		Ctx(ctx).
-		Where("domain", domainName).
-		Delete()
+	query := g.DB().Model("domain").Ctx(ctx).Where("domain", domainName)
+	// Non-admins can only delete domains they own
+	if !isAdminCtx(ctx) {
+		query = query.Where("account_id = ?", rbac.GetCurrentAccountId(ctx))
+	}
+	_, err := query.Delete()
 
 	if err == nil {
 		// remove associated mailboxes
@@ -194,6 +217,11 @@ func Delete(ctx context.Context, domainName string) error {
 
 func Get(ctx context.Context, keyword string, page, pageSize int) ([]v1.Domain, int, error) {
 	m := g.DB().Model("domain").Order("create_time", "desc")
+
+	// Non-admins only see their own domains
+	if !isAdminCtx(ctx) {
+		m = m.Where("account_id = ?", rbac.GetCurrentAccountId(ctx))
+	}
 
 	if keyword != "" {
 		m = m.WhereLike("domain", fmt.Sprintf("%%%s%%", keyword))

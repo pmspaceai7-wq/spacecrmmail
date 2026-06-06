@@ -65,6 +65,11 @@ export const routes: RouteRecordRaw[] = [
 		component: () => import('@/views/login/index.vue'),
 	},
 	{
+		path: '/oauth/callback',
+		name: 'OAuthCallback',
+		component: () => import('@/views/login/oauth-callback.vue'),
+	},
+	{
 		path: '/',
 		redirect: '/overview',
 	},

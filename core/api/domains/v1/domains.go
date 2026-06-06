@@ -56,6 +56,7 @@ type Domain struct {
 
 	BlackCheckResult *BlacklistCheckResult `json:"black_check_result" dc:"Last blacklist check result"`
 	BlackCheckLog    string                `json:"black_check_log" dc:"Path to blacklist check log file"`
+	AccountId        int64                 `json:"account_id" dc:"Owner account ID"`
 }
 
 type BlacklistCheckResult struct {

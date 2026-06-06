@@ -123,7 +123,10 @@
 			"loginButton": "登录",
 			"captchaPlaceholder": "验证码",
 			"changeCaptcha": "点击切换验证码",
-			"captcha": "验证码"
+			"captcha": "验证码",
+			"orContinueWith": "或通过以下方式继续",
+			"continueWithGoogle": "使用 Google 登录",
+			"continueWithMicrosoft": "使用 Microsoft 登录"
 		},
 		"validation": {
 			"usernameRequired": "用户名不能为空！",

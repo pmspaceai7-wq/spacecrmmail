@@ -42,3 +42,17 @@ export const logout = () => {
 export const getValidateCode = () => {
 	return instance.get('/get_validate_code')
 }
+
+/**
+ * @description Initiate OAuth login — returns { redirectUrl }
+ */
+export const oauthInitiate = (provider: string) => {
+	return instance.get('/oauth/initiate', { params: { provider } })
+}
+
+/**
+ * @description Get current logged-in user info including roles
+ */
+export const getCurrentUser = () => {
+	return instance.get('/current-user')
+}

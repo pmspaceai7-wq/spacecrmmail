@@ -4,7 +4,7 @@ import { Layout } from '@/router/constant'
 const route: RouteRecordRaw = {
 	path: '/smtp',
 	component: Layout,
-	meta: { sort: 8, hidden: false, key: 'smtp', title: 'SMTP', titleKey: '' },
+	meta: { sort: 8, hidden: false, key: 'smtp', title: 'SMTP', titleKey: '', adminOnly: true },
 	children: [
 		{
 			path: '/smtp',

@@ -68,7 +68,11 @@ const activeMenuKey = computed(() => {
 
 // 路由菜单
 const routerMenus = computed(() => {
-	return menuStore.menuList.filter(route => route.meta && !route.meta.hidden)
+	return menuStore.menuList.filter(route => {
+		if (!route.meta || route.meta.hidden) return false
+		if (route.meta.adminOnly && !userStore.isAdmin) return false
+		return true
+	})
 })
 
 // 导航菜单选项

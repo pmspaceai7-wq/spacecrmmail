@@ -9,6 +9,7 @@ const route: RouteRecordRaw = {
 		key: 'mailbox',
 		title: 'MailBoxes',
 		titleKey: 'layout.menu.mailboxes',
+		adminOnly: true,
 	},
 	children: [
 		{

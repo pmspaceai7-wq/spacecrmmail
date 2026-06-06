@@ -5,7 +5,7 @@ const route: RouteRecordRaw = {
 	path: '/logs',
 	redirect: '/logs/operation',
 	component: Layout,
-	meta: { key: 'logs', title: 'Logs', titleKey: 'layout.menu.logs' },
+	meta: { key: 'logs', title: 'Logs', titleKey: 'layout.menu.logs', adminOnly: true },
 	children: [
 		{
 			path: '/logs',

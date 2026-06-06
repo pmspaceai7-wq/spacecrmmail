@@ -10,4 +10,5 @@ type Domain struct {
 	RateLimit    int    `json:"rate_limit"    dc:"Rate limit for sending emails per second"`
 	CreateTime   int64  `json:"create_time"   dc:"Creation time"`
 	Active       int    `json:"active"        dc:"Status: 1-enabled, 0-disabled"`
+	AccountId    int64  `json:"account_id"    dc:"Owner account ID (0 = system/admin)"`
 }
