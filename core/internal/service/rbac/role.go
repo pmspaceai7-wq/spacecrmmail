@@ -125,7 +125,7 @@ func (s *roleService) BindPermissions(ctx context.Context, roleId int64, permiss
 func (s *roleService) GetPermissions(ctx context.Context, roleId int64) ([]model.Permission, error) {
 	var permissions []model.Permission
 	err := g.DB().Model("permission").
-		LeftJoin("role_permission", "permission.id=role_permission.permission_id").
+		LeftJoin("role_permission", "permission.permission_id=role_permission.permission_id").
 		Where("role_permission.role_id = ?", roleId).
 		Scan(&permissions)
 	return permissions, err
