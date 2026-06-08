@@ -72,6 +72,9 @@ func init() {
 				FOREIGN KEY (permission_id) REFERENCES permission(permission_id) ON DELETE CASCADE
 			)`,
 
+			// share_admin_domains flag migration
+			`ALTER TABLE account ADD COLUMN IF NOT EXISTS share_admin_domains SMALLINT NOT NULL DEFAULT 0`,
+
 			// OAuth provider links table
 			`CREATE TABLE IF NOT EXISTS account_oauth (
 				id SERIAL PRIMARY KEY,

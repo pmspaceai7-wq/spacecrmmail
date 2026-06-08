@@ -58,6 +58,8 @@ func init() {
 			`CREATE INDEX IF NOT EXISTS idx_domain_smtp_transport_domain_smtpName ON bm_domain_smtp_transport(domain,smtp_name);`,
 			`CREATE INDEX IF NOT EXISTS idx_relay_domain_mapping_domain ON bm_relay_domain_mapping(sender_domain);`,
 			`CREATE INDEX IF NOT EXISTS idx_relay_domain_mapping_relay_id ON bm_relay_domain_mapping(relay_id);`,
+			`ALTER TABLE bm_relay_config ADD COLUMN IF NOT EXISTS account_id INT REFERENCES account(account_id) ON DELETE SET NULL`,
+			`CREATE INDEX IF NOT EXISTS idx_relay_config_account ON bm_relay_config(account_id)`,
 		}
 
 		for _, sql := range sqlList {

@@ -204,6 +204,14 @@ func init() {
 			`CREATE INDEX IF NOT EXISTS idx_bm_tags_group_id ON bm_tags(group_id)`,
 			`CREATE INDEX IF NOT EXISTS idx_bm_contact_tags_contact_id ON bm_contact_tags(contact_id)`,
 			`CREATE INDEX IF NOT EXISTS idx_bm_contact_tags_tag_id ON bm_contact_tags(tag_id)`,
+			`ALTER TABLE bm_contact_groups ADD COLUMN IF NOT EXISTS account_id INT REFERENCES account(account_id) ON DELETE CASCADE`,
+			`ALTER TABLE email_templates    ADD COLUMN IF NOT EXISTS account_id INT REFERENCES account(account_id) ON DELETE CASCADE`,
+			`ALTER TABLE email_tasks        ADD COLUMN IF NOT EXISTS account_id INT REFERENCES account(account_id) ON DELETE CASCADE`,
+			`ALTER TABLE api_templates      ADD COLUMN IF NOT EXISTS account_id INT REFERENCES account(account_id) ON DELETE CASCADE`,
+			`CREATE INDEX IF NOT EXISTS idx_contact_groups_account ON bm_contact_groups(account_id)`,
+			`CREATE INDEX IF NOT EXISTS idx_email_templates_account ON email_templates(account_id)`,
+			`CREATE INDEX IF NOT EXISTS idx_email_tasks_account ON email_tasks(account_id)`,
+			`CREATE INDEX IF NOT EXISTS idx_api_templates_account ON api_templates(account_id)`,
 		}
 
 		for _, sql := range batchMailSQLList {

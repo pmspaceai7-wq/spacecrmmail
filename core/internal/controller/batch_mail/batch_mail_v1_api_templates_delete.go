@@ -5,6 +5,7 @@ import (
 	"billionmail-core/internal/consts"
 	"billionmail-core/internal/model/entity"
 	"billionmail-core/internal/service/public"
+	rbac "billionmail-core/internal/service/rbac"
 	"context"
 	"github.com/gogf/gf/v2/database/gdb"
 	"github.com/gogf/gf/v2/errors/gerror"
@@ -14,8 +15,12 @@ import (
 func (c *ControllerV1) ApiTemplatesDelete(ctx context.Context, req *v1.ApiTemplatesDeleteReq) (res *v1.ApiTemplatesDeleteRes, err error) {
 	res = &v1.ApiTemplatesDeleteRes{}
 
-	// verify if API exists
-	count, err := g.DB().Model("api_templates").Where("id", req.ID).Count()
+	// verify if API exists and belongs to current user
+	query := g.DB().Model("api_templates").Where("id", req.ID)
+	if !rbac.IsAdminAccount(ctx) {
+		query = query.Where("account_id = ?", rbac.GetCurrentAccountId(ctx))
+	}
+	count, err := query.Count()
 	if err != nil {
 		return nil, err
 	}

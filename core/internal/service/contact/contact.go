@@ -3,6 +3,7 @@ package contact
 import (
 	v1 "billionmail-core/api/contact/v1"
 	"billionmail-core/internal/model/entity"
+	rbac "billionmail-core/internal/service/rbac"
 	"context"
 	"database/sql"
 	"encoding/json"
@@ -26,6 +27,7 @@ func CreateGroup(ctx context.Context, name, description string, double_optin int
 		"update_time":  int(now),
 		"token":        token,
 		"double_optin": double_optin,
+		"account_id":   rbac.GetCurrentAccountId(ctx),
 	}
 	lastInsertId, err := g.DB().Model("bm_contact_groups").Ctx(ctx).Data(data).InsertAndGetId()
 	return int(lastInsertId), err
@@ -41,6 +43,10 @@ func GetAllGroups(ctx context.Context, keyword string) ([]*v1.ContactGroup, erro
 	model := g.DB().Model("bm_contact_groups").
 		Fields("id, name, description, create_time, update_time").
 		Order("create_time desc")
+
+	if !rbac.IsAdminAccount(ctx) {
+		model = model.Where("account_id = ?", rbac.GetCurrentAccountId(ctx))
+	}
 
 	// Add keyword search (group name or description)
 	if keyword != "" {
@@ -59,7 +65,11 @@ func GetAllGroups(ctx context.Context, keyword string) ([]*v1.ContactGroup, erro
 
 func UpdateGroup(ctx context.Context, id int, data g.Map) error {
 	data["update_time"] = time.Now().Unix()
-	_, err := g.DB().Model("bm_contact_groups").Ctx(ctx).Data(data).Where("id", id).Update()
+	query := g.DB().Model("bm_contact_groups").Ctx(ctx).Data(data).Where("id", id)
+	if !rbac.IsAdminAccount(ctx) {
+		query = query.Where("account_id = ?", rbac.GetCurrentAccountId(ctx))
+	}
+	_, err := query.Update()
 	return err
 }
 
@@ -69,7 +79,11 @@ func DeleteContactsByGroupId(ctx context.Context, groupId int) error {
 }
 
 func DeleteGroup(ctx context.Context, id int) error {
-	_, err := g.DB().Model("bm_contact_groups").Ctx(ctx).Where("id", id).Delete()
+	query := g.DB().Model("bm_contact_groups").Ctx(ctx).Where("id", id)
+	if !rbac.IsAdminAccount(ctx) {
+		query = query.Where("account_id = ?", rbac.GetCurrentAccountId(ctx))
+	}
+	_, err := query.Delete()
 	return err
 }
 

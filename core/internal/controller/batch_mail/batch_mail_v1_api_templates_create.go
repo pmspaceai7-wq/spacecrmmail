@@ -4,6 +4,7 @@ import (
 	"billionmail-core/api/batch_mail/v1"
 	"billionmail-core/internal/consts"
 	"billionmail-core/internal/service/public"
+	rbac "billionmail-core/internal/service/rbac"
 	"context"
 	"crypto/rand"
 	"encoding/hex"
@@ -66,6 +67,7 @@ func (c *ControllerV1) ApiTemplatesCreate(ctx context.Context, req *v1.ApiTempla
 		"active":               req.Active,
 		"expire_time":          0,
 		"last_key_update_time": time.Now().Unix(),
+		"account_id":           rbac.GetCurrentAccountId(ctx),
 	})
 
 	if err != nil {

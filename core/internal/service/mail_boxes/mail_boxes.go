@@ -5,6 +5,7 @@ import (
 	"billionmail-core/internal/consts"
 	"billionmail-core/internal/service/dockerapi"
 	"billionmail-core/internal/service/public"
+	rbac "billionmail-core/internal/service/rbac"
 	"context"
 	"encoding/base64"
 	"encoding/hex"
@@ -21,7 +22,50 @@ import (
 	"time"
 )
 
+// accessibleDomains returns the domain names the current user may access,
+// and whether the user is an admin (admin has no domain filter).
+func accessibleDomains(ctx context.Context) ([]string, bool) {
+	if rbac.IsAdminAccount(ctx) {
+		return nil, true
+	}
+	accountId := rbac.GetCurrentAccountId(ctx)
+	if accountId == 0 {
+		return nil, false
+	}
+	query := g.DB().Model("domain").Fields("domain")
+	if rbac.GetShareAdminDomains(ctx) {
+		adminId := rbac.GetAdminAccountId(ctx)
+		query = query.WhereIn("account_id", []int64{accountId, adminId})
+	} else {
+		query = query.Where("account_id = ?", accountId)
+	}
+	vals, _ := query.Array("domain")
+	var result []string
+	for _, v := range vals {
+		result = append(result, v.String())
+	}
+	return result, false
+}
+
+// domainAllowed checks whether the given domain is in the accessible list for the current user
+func domainAllowed(ctx context.Context, domain string) bool {
+	if rbac.IsAdminAccount(ctx) {
+		return true
+	}
+	allowed, _ := accessibleDomains(ctx)
+	for _, d := range allowed {
+		if d == domain {
+			return true
+		}
+	}
+	return false
+}
+
 func Add(ctx context.Context, mailbox *v1.Mailbox) (err error) {
+	if !domainAllowed(ctx, strings.ToLower(mailbox.Domain)) {
+		return fmt.Errorf("you do not have permission to add a mailbox for domain %s", mailbox.Domain)
+	}
+
 	// Encode password
 	mailbox.PasswordEncode = PasswdEncode(ctx, mailbox.Password)
 
@@ -101,6 +145,10 @@ func Update(ctx context.Context, mailbox *v1.Mailbox) (err error) {
 }
 
 func Delete(ctx context.Context, email string) error {
+	parts := strings.SplitN(email, "@", 2)
+	if len(parts) == 2 && !domainAllowed(ctx, parts[1]) {
+		return fmt.Errorf("you do not have permission to delete mailbox for domain %s", parts[1])
+	}
 	_, err := g.DB().Model("mailbox").
 		Ctx(ctx).
 		Where("username", email).
@@ -111,6 +159,14 @@ func Delete(ctx context.Context, email string) error {
 func DeleteBatch(ctx context.Context, emails []string) (int64, error) {
 	if len(emails) == 0 {
 		return 0, nil
+	}
+
+	// verify each email's domain is accessible
+	for _, email := range emails {
+		parts := strings.SplitN(email, "@", 2)
+		if len(parts) == 2 && !domainAllowed(ctx, parts[1]) {
+			return 0, fmt.Errorf("you do not have permission to delete mailbox for domain %s", parts[1])
+		}
 	}
 
 	result, err := g.DB().Model("mailbox").
@@ -133,8 +189,29 @@ func DeleteBatch(ctx context.Context, emails []string) (int64, error) {
 func Get(ctx context.Context, domain, keyword string, page, pageSize int) ([]v1.Mailbox, int, error) {
 	m := g.DB().Model("mailbox").Order("create_time", "desc")
 
-	if domain != "" {
-		m.Where("domain", domain)
+	allowedDomains, isAdmin := accessibleDomains(ctx)
+	if !isAdmin {
+		if domain != "" {
+			// verify the requested domain is accessible
+			found := false
+			for _, d := range allowedDomains {
+				if d == domain {
+					found = true
+					break
+				}
+			}
+			if !found {
+				return nil, 0, fmt.Errorf("you do not have permission to view mailboxes for domain %s", domain)
+			}
+			m = m.Where("domain", domain)
+		} else if len(allowedDomains) > 0 {
+			m = m.WhereIn("domain", allowedDomains)
+		} else {
+			// user has no accessible domains
+			return nil, 0, nil
+		}
+	} else if domain != "" {
+		m = m.Where("domain", domain)
 	}
 
 	if keyword != "" {
@@ -157,7 +234,7 @@ func All(ctx context.Context, domain string) ([]v1.Mailbox, error) {
 	query := g.DB().Model("mailbox")
 
 	if domain != "" {
-		query.Where("domain", domain)
+		query = query.Where("domain", domain)
 	}
 
 	err := query.Scan(&mailboxes)
@@ -173,7 +250,7 @@ func AllEmail(ctx context.Context, domain string) ([]string, error) {
 	query := g.DB().Model("mailbox")
 
 	if domain != "" {
-		query.Where("domain", domain)
+		query = query.Where("domain", domain)
 	}
 
 	arr, err := query.Array("username")

@@ -5,6 +5,7 @@ import (
 	"billionmail-core/internal/model/entity"
 	"billionmail-core/internal/service/maillog_stat"
 	"billionmail-core/internal/service/public"
+	rbac "billionmail-core/internal/service/rbac"
 	"billionmail-core/internal/service/warmup"
 	"context"
 	"fmt"
@@ -57,6 +58,10 @@ func GetTasksWithPage(ctx context.Context, page, pageSize int, keyword string, s
 	}
 
 	model := g.DB().Model("email_tasks").Safe()
+
+	if !rbac.IsAdminAccount(ctx) {
+		model = model.Where("account_id = ?", rbac.GetCurrentAccountId(ctx))
+	}
 
 	// add query conditions
 	if keyword != "" {
@@ -111,9 +116,11 @@ func DeleteTask(ctx context.Context, id int) error {
 	// delete task before removing task executor
 	RemoveTaskExecutor(id)
 
-	_, err := g.DB().Model("email_tasks").
-		Where("id", id).
-		Delete()
+	query := g.DB().Model("email_tasks").Where("id", id)
+	if !rbac.IsAdminAccount(ctx) {
+		query = query.Where("account_id = ?", rbac.GetCurrentAccountId(ctx))
+	}
+	_, err := query.Delete()
 	return err
 }
 
@@ -154,6 +161,7 @@ func CreateTask(ctx context.Context, args CreateTaskArgs) (int, error) {
 		"group_id":    args.GroupId,
 		"tag_ids":     tagIdsJson,
 		"tag_logic":   args.TagLogic,
+		"account_id":  rbac.GetCurrentAccountId(ctx),
 	})
 	if err != nil {
 		g.Log().Debug(ctx, "Failed to create campaign:", err.Error())

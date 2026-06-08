@@ -2,6 +2,7 @@ package email_template
 
 import (
 	"billionmail-core/api/email_template/v1"
+	rbac "billionmail-core/internal/service/rbac"
 	"context"
 	"github.com/gogf/gf/v2/frame/g"
 	"time"
@@ -29,6 +30,7 @@ func CreateTemplate(ctx context.Context, name string, addType int, content, rend
 			"create_time": now,
 			"update_time": now,
 			"chat_id":     chat_id,
+			"account_id":  rbac.GetCurrentAccountId(ctx),
 		})
 	if err != nil {
 		return 0, err
@@ -39,10 +41,11 @@ func CreateTemplate(ctx context.Context, name string, addType int, content, rend
 
 // DeleteTemplate
 func DeleteTemplate(ctx context.Context, id int) error {
-	_, err := g.DB().Model("email_templates").
-		Ctx(ctx).
-		Where("id", id).
-		Delete()
+	query := g.DB().Model("email_templates").Ctx(ctx).Where("id", id)
+	if !rbac.IsAdminAccount(ctx) {
+		query = query.Where("account_id = ?", rbac.GetCurrentAccountId(ctx))
+	}
+	_, err := query.Delete()
 	return err
 }
 
@@ -71,11 +74,11 @@ func UpdateTemplate(ctx context.Context, id int, name, content, render string) e
 		data["render"] = render
 	}
 
-	_, err := g.DB().Model("email_templates").
-		Ctx(ctx).
-		Where("id", id).
-		Data(data).
-		Update()
+	query := g.DB().Model("email_templates").Ctx(ctx).Where("id", id).Data(data)
+	if !rbac.IsAdminAccount(ctx) {
+		query = query.Where("account_id = ?", rbac.GetCurrentAccountId(ctx))
+	}
+	_, err := query.Update()
 	return err
 }
 
@@ -91,6 +94,10 @@ func GetTemplatesWithPage(ctx context.Context, page, pageSize int, keyword strin
 	model := g.DB().Model("email_templates").
 		Ctx(ctx).
 		Safe()
+
+	if !rbac.IsAdminAccount(ctx) {
+		model = model.Where("account_id = ?", rbac.GetCurrentAccountId(ctx))
+	}
 
 	if keyword != "" {
 		model = model.WhereLike("temp_name", "%"+keyword+"%")

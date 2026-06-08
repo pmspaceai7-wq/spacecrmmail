@@ -1613,7 +1613,8 @@
 				"email": "Email",
 				"roles": "Roles",
 				"status": "Status",
-				"newPassword": "New Password"
+				"newPassword": "New Password",
+				"shareAdminDomains": "Can see admin's domains"
 			}
 		}
 	},

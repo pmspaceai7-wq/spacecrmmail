@@ -4,6 +4,7 @@ import (
 	"billionmail-core/api/batch_mail/v1"
 	"billionmail-core/internal/consts"
 	"billionmail-core/internal/service/public"
+	rbac "billionmail-core/internal/service/rbac"
 	"context"
 	"net"
 	"strings"
@@ -16,9 +17,12 @@ import (
 func (c *ControllerV1) ApiTemplatesUpdate(ctx context.Context, req *v1.ApiTemplatesUpdateReq) (res *v1.ApiTemplatesUpdateRes, err error) {
 	res = &v1.ApiTemplatesUpdateRes{}
 
-	// verify if API exists
-
-	count, err := g.DB().Model("api_templates").Where("id", req.ID).Count()
+	// verify if API exists and belongs to current user
+	apiQuery := g.DB().Model("api_templates").Where("id", req.ID)
+	if !rbac.IsAdminAccount(ctx) {
+		apiQuery = apiQuery.Where("account_id = ?", rbac.GetCurrentAccountId(ctx))
+	}
+	count, err := apiQuery.Count()
 	if err != nil {
 		return nil, err
 	}

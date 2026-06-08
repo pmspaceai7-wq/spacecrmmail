@@ -23,12 +23,13 @@ func (c *ControllerV1) AccountList(ctx context.Context, req *v1.AccountListReq) 
 	list := make([]v1.AccountInfoItem, 0, len(accounts))
 	for _, a := range accounts {
 		list = append(list, v1.AccountInfoItem{
-			Id:         a.AccountId,
-			Username:   a.Username,
-			Email:      a.Email,
-			Status:     a.Status,
-			Language:   a.Language,
-			CreateTime: a.CreateTime,
+			Id:                a.AccountId,
+			Username:          a.Username,
+			Email:             a.Email,
+			Status:            a.Status,
+			Language:          a.Language,
+			CreateTime:        a.CreateTime,
+			ShareAdminDomains: a.ShareAdminDomains,
 		})
 	}
 
@@ -45,6 +46,33 @@ func (c *ControllerV1) AccountList(ctx context.Context, req *v1.AccountListReq) 
 func (c *ControllerV1) AccountDetail(ctx context.Context, req *v1.AccountDetailReq) (res *v1.AccountDetailRes, err error) {
 	res = &v1.AccountDetailRes{}
 
+	allRoles, err := service.Account().GetAll(ctx)
+	if err != nil {
+		err = gerror.New("Failed to get all roles")
+		return
+	}
+
+	allRoleItems := make([]v1.RoleInfoItem, 0, len(allRoles))
+	for _, r := range allRoles {
+		allRoleItems = append(allRoleItems, v1.RoleInfoItem{
+			Id:          r.RoleId,
+			Name:        r.RoleName,
+			Description: r.Description,
+			Status:      r.Status,
+			CreateTime:  r.CreateTime,
+		})
+	}
+
+	res.Data.AllRoles = allRoleItems
+
+	// accountId=0 means "create modal" — only return allRoles
+	if req.AccountId == 0 {
+		res.Success = true
+		res.Code = 0
+		res.Msg = "Retrieved successfully"
+		return
+	}
+
 	account, err := service.Account().GetById(ctx, req.AccountId)
 	if err != nil || account == nil {
 		err = gerror.New("Account not found")
@@ -54,12 +82,6 @@ func (c *ControllerV1) AccountDetail(ctx context.Context, req *v1.AccountDetailR
 	roles, err := service.Account().GetAccountRoles(ctx, req.AccountId)
 	if err != nil {
 		err = gerror.New("Failed to get account roles")
-		return
-	}
-
-	allRoles, err := service.Account().GetAll(ctx)
-	if err != nil {
-		err = gerror.New("Failed to get all roles")
 		return
 	}
 
@@ -74,30 +96,19 @@ func (c *ControllerV1) AccountDetail(ctx context.Context, req *v1.AccountDetailR
 		})
 	}
 
-	allRoleItems := make([]v1.RoleInfoItem, 0, len(allRoles))
-	for _, r := range allRoles {
-		allRoleItems = append(allRoleItems, v1.RoleInfoItem{
-			Id:          r.RoleId,
-			Name:        r.RoleName,
-			Description: r.Description,
-			Status:      r.Status,
-			CreateTime:  r.CreateTime,
-		})
-	}
-
 	res.Success = true
 	res.Code = 0
 	res.Msg = "Retrieved successfully"
 	res.Data.Account = v1.AccountInfoItem{
-		Id:         account.AccountId,
-		Username:   account.Username,
-		Email:      account.Email,
-		Status:     account.Status,
-		Language:   account.Language,
-		CreateTime: account.CreateTime,
+		Id:                account.AccountId,
+		Username:          account.Username,
+		Email:             account.Email,
+		Status:            account.Status,
+		Language:          account.Language,
+		CreateTime:        account.CreateTime,
+		ShareAdminDomains: account.ShareAdminDomains,
 	}
 	res.Data.Roles = roleItems
-	res.Data.AllRoles = allRoleItems
 	return
 }
 
@@ -135,11 +146,12 @@ func (c *ControllerV1) AccountCreate(ctx context.Context, req *v1.AccountCreateR
 	}
 
 	accountId, err := service.Account().Create(ctx, &model.Account{
-		Username: req.Username,
-		Password: req.Password,
-		Email:    req.Email,
-		Status:   status,
-		Language: lang,
+		Username:          req.Username,
+		Password:          req.Password,
+		Email:             req.Email,
+		Status:            status,
+		Language:          lang,
+		ShareAdminDomains: req.ShareAdminDomains,
 	})
 	if err != nil {
 		err = gerror.New("Failed to create account")
@@ -182,6 +194,9 @@ func (c *ControllerV1) AccountUpdate(ctx context.Context, req *v1.AccountUpdateR
 	}
 	if req.Lang != "" {
 		account.Language = req.Lang
+	}
+	if req.ShareAdminDomains != nil {
+		account.ShareAdminDomains = *req.ShareAdminDomains
 	}
 
 	if err = service.Account().Update(ctx, account); err != nil {

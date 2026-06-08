@@ -4,6 +4,7 @@ import (
 	"billionmail-core/api/batch_mail/v1"
 	"billionmail-core/internal/service/domains"
 	"billionmail-core/internal/service/public"
+	rbac "billionmail-core/internal/service/rbac"
 	"context"
 	"github.com/gogf/gf/v2/frame/g"
 )
@@ -13,6 +14,10 @@ func (c *ControllerV1) ApiTemplatesList(ctx context.Context, req *v1.ApiTemplate
 
 	// build query conditions
 	model := g.DB().Model("api_templates").Safe()
+
+	if !rbac.IsAdminAccount(ctx) {
+		model = model.Where("account_id = ?", rbac.GetCurrentAccountId(ctx))
+	}
 
 	// add api_name fuzzy search
 	if req.Keyword != "" {

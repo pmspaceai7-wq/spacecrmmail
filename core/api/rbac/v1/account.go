@@ -7,12 +7,13 @@ import (
 
 // AccountInfoItem defines the account information structure
 type AccountInfoItem struct {
-	Id         int64  `json:"id" dc:"Account ID"`
-	Username   string `json:"username" dc:"Username"`
-	Email      string `json:"email" dc:"Email"`
-	Status     int    `json:"status" dc:"Status(0:disabled, 1:enabled)"`
-	Language   string `json:"language" dc:"Language setting"`
-	CreateTime int64  `json:"create_time" dc:"Creation time"`
+	Id                int64  `json:"id" dc:"Account ID"`
+	Username          string `json:"username" dc:"Username"`
+	Email             string `json:"email" dc:"Email"`
+	Status            int    `json:"status" dc:"Status(0:disabled, 1:enabled)"`
+	Language          string `json:"language" dc:"Language setting"`
+	CreateTime        int64  `json:"create_time" dc:"Creation time"`
+	ShareAdminDomains int    `json:"shareAdminDomains" dc:"1=can see admin domains and mailboxes"`
 }
 
 // AccountListReq defines the request for getting account list
@@ -40,7 +41,7 @@ type AccountListRes struct {
 type AccountDetailReq struct {
 	g.Meta        `path:"/account/detail" method:"get" tags:"RBAC" summary:"Get account details" sm:"Get account details" in:"query"`
 	Authorization string `json:"authorization" dc:"Authorization" in:"header"`
-	AccountId     int64  `p:"accountId" v:"required#Please provide account ID" dc:"Account ID"`
+	AccountId     int64  `p:"accountId" dc:"Account ID (0 = return only allRoles for create modal)"`
 }
 
 // AccountDetailRes is the response for getting account details
@@ -55,14 +56,15 @@ type AccountDetailRes struct {
 
 // AccountCreateReq is the request for creating account
 type AccountCreateReq struct {
-	g.Meta        `path:"/account/create" method:"post" tags:"RBAC" summary:"Create account" sm:"Create account" in:"body"`
-	Authorization string  `json:"authorization" dc:"Authorization" in:"header"`
-	Username      string  `p:"username" v:"required#User name can not be empty" dc:"User name"`
-	Password      string  `p:"password" v:"required#Password can not be empty" dc:"Password"`
-	Email         string  `p:"email" v:"required|email#Email can not be empty|Email format is not correct" dc:"Email"`
-	RoleIds       []int64 `p:"roleIds" dc:"Role ID list"`
-	Status        int     `p:"status" d:"1" dc:"Status(0:disabled, 1:enabled)"`
-	Lang          string  `p:"lang" d:"en" dc:"Language setting"`
+	g.Meta            `path:"/account/create" method:"post" tags:"RBAC" summary:"Create account" sm:"Create account" in:"body"`
+	Authorization     string  `json:"authorization" dc:"Authorization" in:"header"`
+	Username          string  `p:"username" v:"required#User name can not be empty" dc:"User name"`
+	Password          string  `p:"password" v:"required#Password can not be empty" dc:"Password"`
+	Email             string  `p:"email" v:"required|email#Email can not be empty|Email format is not correct" dc:"Email"`
+	RoleIds           []int64 `p:"roleIds" dc:"Role ID list"`
+	Status            int     `p:"status" d:"1" dc:"Status(0:disabled, 1:enabled)"`
+	Lang              string  `p:"lang" d:"en" dc:"Language setting"`
+	ShareAdminDomains int     `p:"shareAdminDomains" d:"0" dc:"1=can see admin domains and mailboxes"`
 }
 
 // AccountCreateRes is the response for creating account
@@ -75,14 +77,15 @@ type AccountCreateRes struct {
 
 // AccountUpdateReq is the request for updating account
 type AccountUpdateReq struct {
-	g.Meta        `path:"/account/update" method:"post" tags:"RBAC" summary:"Update account" sm:"Update account" in:"body"`
-	Authorization string  `json:"authorization" dc:"Authorization" in:"header"`
-	AccountId     int64   `p:"accountId" v:"required#Account ID can not be empty" dc:"Account ID"`
-	Username      string  `p:"username" dc:"User name"`
-	Email         string  `p:"email" v:"email#Email format is not correct" dc:"Email"`
-	RoleIds       []int64 `p:"roleIds" dc:"Role ID list"`
-	Status        int     `p:"status" dc:"Status(0:disabled, 1:enabled)"`
-	Lang          string  `p:"lang" dc:"Language setting"`
+	g.Meta            `path:"/account/update" method:"post" tags:"RBAC" summary:"Update account" sm:"Update account" in:"body"`
+	Authorization     string  `json:"authorization" dc:"Authorization" in:"header"`
+	AccountId         int64   `p:"accountId" v:"required#Account ID can not be empty" dc:"Account ID"`
+	Username          string  `p:"username" dc:"User name"`
+	Email             string  `p:"email" v:"email#Email format is not correct" dc:"Email"`
+	RoleIds           []int64 `p:"roleIds" dc:"Role ID list"`
+	Status            int     `p:"status" dc:"Status(0:disabled, 1:enabled)"`
+	Lang              string  `p:"lang" dc:"Language setting"`
+	ShareAdminDomains *int    `p:"shareAdminDomains" dc:"1=can see admin domains and mailboxes (nil=no change)"`
 }
 
 // AccountUpdateRes is the response for updating account

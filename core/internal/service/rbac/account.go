@@ -76,13 +76,14 @@ func (s *accountService) Create(ctx context.Context, accountData *model.Account)
 	}
 
 	result, err := g.DB().Model("account").Data(g.Map{
-		"username":    accountData.Username,
-		"password":    string(hashedPassword),
-		"email":       accountData.Email,
-		"status":      accountData.Status,
-		"language":    accountData.Language,
-		"create_time": time.Now().Unix(),
-		"update_time": time.Now().Unix(),
+		"username":            accountData.Username,
+		"password":            string(hashedPassword),
+		"email":               accountData.Email,
+		"status":              accountData.Status,
+		"language":            accountData.Language,
+		"share_admin_domains": accountData.ShareAdminDomains,
+		"create_time":         time.Now().Unix(),
+		"update_time":         time.Now().Unix(),
 	}).Insert()
 	if err != nil {
 		return 0, err
@@ -99,11 +100,12 @@ func (s *accountService) Create(ctx context.Context, accountData *model.Account)
 // Update updates account information
 func (s *accountService) Update(ctx context.Context, accountData *model.Account) error {
 	_, err := g.DB().Model("account").Data(g.Map{
-		"username":    accountData.Username,
-		"email":       accountData.Email,
-		"status":      accountData.Status,
-		"language":    accountData.Language,
-		"update_time": time.Now().Unix(),
+		"username":            accountData.Username,
+		"email":               accountData.Email,
+		"status":              accountData.Status,
+		"language":            accountData.Language,
+		"share_admin_domains": accountData.ShareAdminDomains,
+		"update_time":         time.Now().Unix(),
 	}).Where("account_id = ?", accountData.AccountId).Update()
 	return err
 }
@@ -337,4 +339,50 @@ func GetCurrentAccount(ctx context.Context) (acc *model.Account, err error) {
 	}
 
 	return
+}
+
+// IsAdminAccount returns true if the current context user has the admin role
+func IsAdminAccount(ctx context.Context) bool {
+	accountId := GetCurrentAccountId(ctx)
+	if accountId == 0 {
+		return false
+	}
+	roles, err := Account().GetAccountRoles(ctx, accountId)
+	if err != nil {
+		return false
+	}
+	for _, r := range roles {
+		if r.RoleName == "admin" {
+			return true
+		}
+	}
+	return false
+}
+
+// GetShareAdminDomains returns true if the current user is allowed to see admin's domains
+func GetShareAdminDomains(ctx context.Context) bool {
+	accountId := GetCurrentAccountId(ctx)
+	if accountId == 0 {
+		return false
+	}
+	val, err := g.DB().Model("account").
+		Where("account_id = ?", accountId).
+		Value("share_admin_domains")
+	if err != nil {
+		return false
+	}
+	return val.Int() == 1
+}
+
+// GetAdminAccountId returns the account_id of the first admin account
+func GetAdminAccountId(ctx context.Context) int64 {
+	val, err := g.DB().Model("account_role ar").
+		LeftJoin("role r", "ar.role_id = r.role_id").
+		Where("r.role_name = ?", "admin").
+		Order("ar.account_id ASC").
+		Value("ar.account_id")
+	if err != nil || val == nil {
+		return 0
+	}
+	return val.Int64()
 }

@@ -45,6 +45,9 @@
 						v-model:value="form.status"
 						:options="statusOptions" />
 				</n-form-item>
+				<n-form-item :label="t('settings.accounts.form.shareAdminDomains')" path="shareAdminDomains">
+					<n-switch v-model:value="form.shareAdminDomains" :checked-value="1" :unchecked-value="0" />
+				</n-form-item>
 			</n-form>
 			<template #action>
 				<n-button @click="showFormModal = false">{{ t('common.cancel') }}</n-button>
@@ -126,6 +129,7 @@ const form = reactive({
 	email: '',
 	roleIds: [] as number[],
 	status: 1,
+	shareAdminDomains: 0 as 0 | 1,
 })
 
 const formRules = {
@@ -214,12 +218,13 @@ const openCreateModal = async () => {
 const openEditModal = async (row: AccountRow) => {
 	editingAccount.value = row
 	const res = await getAccountDetail(row.id)
-	if (isObject<{ account: AccountRow; roles: { id: number; name: string }[]; allRoles: { id: number; name: string }[] }>(res)) {
+	if (isObject<{ account: AccountRow & { shareAdminDomains?: number }; roles: { id: number; name: string }[]; allRoles: { id: number; name: string }[] }>(res)) {
 		roleOptions.value = res.allRoles.map(r => ({ value: r.id, label: r.name }))
 		form.username = res.account.username
 		form.email = res.account.email
 		form.status = res.account.status
 		form.roleIds = res.roles.map(r => r.id)
+		form.shareAdminDomains = (res.account.shareAdminDomains ?? 0) as 0 | 1
 	}
 	showFormModal.value = true
 }
@@ -230,6 +235,7 @@ const resetForm = () => {
 	form.email = ''
 	form.roleIds = []
 	form.status = 1
+	form.shareAdminDomains = 0
 	editingAccount.value = null
 }
 
@@ -244,6 +250,7 @@ const handleSave = async () => {
 				email: form.email,
 				roleIds: form.roleIds,
 				status: form.status,
+				shareAdminDomains: form.shareAdminDomains,
 			})
 			message.success('Account updated')
 		} else {
@@ -253,6 +260,7 @@ const handleSave = async () => {
 				email: form.email,
 				roleIds: form.roleIds,
 				status: form.status,
+				shareAdminDomains: form.shareAdminDomains,
 			})
 			message.success('Account created')
 		}

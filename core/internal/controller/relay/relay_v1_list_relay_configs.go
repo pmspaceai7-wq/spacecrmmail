@@ -5,6 +5,7 @@ import (
 	"billionmail-core/internal/model/entity"
 	"billionmail-core/internal/service/public"
 	relay_service "billionmail-core/internal/service/relay"
+	rbac "billionmail-core/internal/service/rbac"
 	"context"
 	"fmt"
 	"github.com/gogf/gf/v2/os/gcache"
@@ -20,6 +21,11 @@ import (
 func (c *ControllerV1) ListRelayConfigs(ctx context.Context, req *v1.ListRelayConfigsReq) (res *v1.ListRelayConfigsRes, err error) {
 	res = &v1.ListRelayConfigsRes{}
 	res.Data.List = make([]*v1.BmRelayWithSPF, 0)
+
+	if !rbac.IsAdminAccount(ctx) {
+		res.SetError(gerror.New("Insufficient permissions"))
+		return res, nil
+	}
 
 	model := g.DB().Model("bm_relay_config").Safe()
 

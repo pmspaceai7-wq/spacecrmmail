@@ -5,6 +5,7 @@ import (
 	"billionmail-core/internal/consts"
 	"billionmail-core/internal/service/public"
 	"billionmail-core/internal/service/relay"
+	rbac "billionmail-core/internal/service/rbac"
 	"context"
 	"strings"
 	"time"
@@ -15,6 +16,11 @@ import (
 
 func (c *ControllerV1) CreateRelayConfig(ctx context.Context, req *v1.CreateRelayConfigReq) (res *v1.CreateRelayConfigRes, err error) {
 	res = &v1.CreateRelayConfigRes{}
+
+	if !rbac.IsAdminAccount(ctx) {
+		res.SetError(gerror.New("Insufficient permissions"))
+		return res, nil
+	}
 
 	if len(req.SenderDomains) > 0 {
 

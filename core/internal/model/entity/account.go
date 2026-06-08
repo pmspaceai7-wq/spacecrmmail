@@ -8,7 +8,8 @@ type Account struct {
 	Email         string `json:"email"          dc:"Email address"`
 	Status        int    `json:"status"         dc:"Status: 1-active, 0-disabled"`
 	Language      string `json:"language"       dc:"Language setting"`
-	LastLoginTime int64  `json:"last_login_time" dc:"Last login time"`
-	CreateTime    int64  `json:"create_time"    dc:"Creation time"`
-	UpdateTime    int64  `json:"update_time"    dc:"Update time"`
+	LastLoginTime     int64  `json:"last_login_time"      dc:"Last login time"`
+	CreateTime        int64  `json:"create_time"          dc:"Creation time"`
+	UpdateTime        int64  `json:"update_time"          dc:"Update time"`
+	ShareAdminDomains int    `json:"share_admin_domains"  dc:"1=can see admin domains and mailboxes"`
 }

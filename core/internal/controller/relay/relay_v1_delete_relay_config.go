@@ -5,6 +5,7 @@ import (
 	"billionmail-core/internal/consts"
 	"billionmail-core/internal/service/public"
 	"billionmail-core/internal/service/relay"
+	rbac "billionmail-core/internal/service/rbac"
 	"context"
 	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/frame/g"
@@ -13,6 +14,11 @@ import (
 
 func (c *ControllerV1) DeleteRelayConfig(ctx context.Context, req *v1.DeleteRelayConfigReq) (res *v1.DeleteRelayConfigRes, err error) {
 	res = &v1.DeleteRelayConfigRes{}
+
+	if !rbac.IsAdminAccount(ctx) {
+		res.SetError(gerror.New("Insufficient permissions"))
+		return res, nil
+	}
 
 	relayInfo, err := g.DB().Model("bm_relay_config").Where("id", req.ID).One()
 	if err != nil {

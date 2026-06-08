@@ -15,6 +15,7 @@ export interface AccountCreateParams {
 	roleIds?: number[]
 	status?: number
 	lang?: string
+	shareAdminDomains?: number
 }
 
 export interface AccountUpdateParams {
@@ -24,6 +25,7 @@ export interface AccountUpdateParams {
 	roleIds?: number[]
 	status?: number
 	lang?: string
+	shareAdminDomains?: number
 }
 
 export interface AccountPasswordParams {

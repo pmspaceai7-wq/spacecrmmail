@@ -169,10 +169,11 @@ func Update(ctx context.Context, updateData map[string]interface{}) error {
 
 	domainName, _ := updateData["domain"].(string)
 
-	_, err := g.DB().Model("domain").
-		Ctx(ctx).
-		Where("domain", domainName).
-		Update(updateData)
+	query := g.DB().Model("domain").Ctx(ctx).Where("domain", domainName)
+	if !isAdminCtx(ctx) {
+		query = query.Where("account_id = ?", rbac.GetCurrentAccountId(ctx))
+	}
+	_, err := query.Update(updateData)
 
 	if err != nil {
 		return err
