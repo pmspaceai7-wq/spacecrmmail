@@ -4,9 +4,11 @@ import (
 	"billionmail-core/internal/consts"
 	"billionmail-core/internal/service/batch_mail"
 	"billionmail-core/internal/service/public"
+	rbac "billionmail-core/internal/service/rbac"
 	"context"
 
 	"github.com/gogf/gf/v2/errors/gerror"
+	"github.com/gogf/gf/v2/frame/g"
 
 	"billionmail-core/api/batch_mail/v1"
 	"billionmail-core/internal/service/email_template"
@@ -20,7 +22,7 @@ func (c *ControllerV1) CreateTask(ctx context.Context, req *v1.CreateTaskReq) (r
 		return
 	}
 
-	// check template
+	// check template exists and belongs to current user
 	template, err := email_template.GetTemplate(ctx, req.TemplateId)
 	if err != nil {
 		res.Code = 500
@@ -31,6 +33,16 @@ func (c *ControllerV1) CreateTask(ctx context.Context, req *v1.CreateTaskReq) (r
 		res.Code = 400
 		res.SetError(gerror.New(public.LangCtx(ctx, "Template not found")))
 		return
+	}
+	if !rbac.IsAdminAccount(ctx) {
+		ownerVal, _ := g.DB().Model("email_templates").
+			Where("id", req.TemplateId).
+			Value("account_id")
+		if ownerVal.Int64() != rbac.GetCurrentAccountId(ctx) {
+			res.Code = 403
+			res.SetError(gerror.New(public.LangCtx(ctx, "Template not found")))
+			return
+		}
 	}
 
 	addType := 0

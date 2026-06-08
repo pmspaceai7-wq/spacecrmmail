@@ -35,7 +35,12 @@ func accessibleDomains(ctx context.Context) ([]string, bool) {
 	query := g.DB().Model("domain").Fields("domain")
 	if rbac.GetShareAdminDomains(ctx) {
 		adminId := rbac.GetAdminAccountId(ctx)
-		query = query.WhereIn("account_id", []int64{accountId, adminId})
+		if adminId > 0 && adminId != accountId {
+			// include own domains AND admin's domains (NULL account_id = pre-migration admin domains)
+			query = query.Where("account_id = ? OR account_id = ? OR account_id IS NULL", accountId, adminId)
+		} else {
+			query = query.Where("account_id = ?", accountId)
+		}
 	} else {
 		query = query.Where("account_id = ?", accountId)
 	}

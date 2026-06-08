@@ -30,8 +30,12 @@ func (c *ControllerV1) ApiTemplatesUpdate(ctx context.Context, req *v1.ApiTempla
 		return nil, gerror.New(public.LangCtx(ctx, "API does not exist"))
 	}
 
-	// verify if template exists
-	count, err = g.DB().Model("email_templates").Where("id", req.TemplateId).Count()
+	// verify if template exists and belongs to current user
+	templateQuery := g.DB().Model("email_templates").Where("id", req.TemplateId)
+	if !rbac.IsAdminAccount(ctx) {
+		templateQuery = templateQuery.Where("account_id = ?", rbac.GetCurrentAccountId(ctx))
+	}
+	count, err = templateQuery.Count()
 	if err != nil {
 		return nil, err
 	}

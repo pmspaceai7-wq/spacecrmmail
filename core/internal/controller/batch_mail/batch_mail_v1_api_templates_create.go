@@ -27,8 +27,12 @@ func generateApiKey() (string, error) {
 func (c *ControllerV1) ApiTemplatesCreate(ctx context.Context, req *v1.ApiTemplatesCreateReq) (res *v1.ApiTemplatesCreateRes, err error) {
 	res = &v1.ApiTemplatesCreateRes{}
 
-	// check if template exists
-	count, err := g.DB().Model("email_templates").Where("id", req.TemplateId).Count()
+	// check if template exists and belongs to current user
+	templateQuery := g.DB().Model("email_templates").Where("id", req.TemplateId)
+	if !rbac.IsAdminAccount(ctx) {
+		templateQuery = templateQuery.Where("account_id = ?", rbac.GetCurrentAccountId(ctx))
+	}
+	count, err := templateQuery.Count()
 	if err != nil {
 		return nil, err
 	}

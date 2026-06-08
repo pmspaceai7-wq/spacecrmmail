@@ -131,15 +131,13 @@ func GetTemplatesByID(ctx context.Context, id int) (*v1.EmailTemplate, error) {
 	return template, err
 }
 
-// GetTemplatesAll  id name
+// GetTemplatesAll returns all templates accessible to the current user
 func GetTemplatesAll(ctx context.Context) ([]*v1.EmailTemplate, error) {
 	var templates []*v1.EmailTemplate
-	//selectFields := "id, temp_name"
-
-	err := g.DB().Model("email_templates").
-		Ctx(ctx).
-		//Fields(selectFields).
-		Order("create_time DESC").
-		Scan(&templates)
+	model := g.DB().Model("email_templates").Ctx(ctx)
+	if !rbac.IsAdminAccount(ctx) {
+		model = model.Where("account_id = ?", rbac.GetCurrentAccountId(ctx))
+	}
+	err := model.Order("create_time DESC").Scan(&templates)
 	return templates, err
 }

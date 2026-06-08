@@ -127,6 +127,16 @@ func init() {
 		_ = AddColumnIfNotExists("domain", "hasbrandinfo", "SMALLINT", "0", false)
 		_ = AddColumnIfNotExists("domain", "current_usage", "BIGINT", "0", true)
 
+		// Backfill domain.account_id for pre-migration rows: assign NULL-owner domains to the admin account
+		_, _ = g.DB().Exec(context.Background(), `
+			UPDATE domain SET account_id = (
+				SELECT ar.account_id FROM account_role ar
+				JOIN role r ON ar.role_id = r.role_id
+				WHERE r.role_name = 'admin'
+				ORDER BY ar.account_id ASC
+				LIMIT 1
+			) WHERE account_id IS NULL
+		`)
 
 		// mailbox used quota column
 		_ = AddColumnIfNotExists("mailbox", "used_quota", "BIGINT", "0", true)
