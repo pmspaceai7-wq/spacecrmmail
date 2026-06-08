@@ -92,14 +92,22 @@ func CleanupIdleExecutors() {
 
 // ProcessEmailTasks
 func ProcessEmailTasks(ctx context.Context) {
-	// get pending tasks
+	// get pending tasks — retry up to 3 times on transient DB socket errors
 	var tasks []*entity.EmailTask
-	err := g.DB().Model("email_tasks").
-		Where("task_process IN (0,1)").              // not started or running
-		Where("pause", 0).                           // not paused
-		Where("start_time <= ?", time.Now().Unix()). // start time has arrived
-		Order("id ASC").
-		Scan(&tasks)
+	var err error
+	for i := 0; i < 3; i++ {
+		err = g.DB().Model("email_tasks").
+			Where("task_process IN (0,1)").              // not started or running
+			Where("pause", 0).                           // not paused
+			Where("start_time <= ?", time.Now().Unix()). // start time has arrived
+			Order("id ASC").
+			Scan(&tasks)
+		if err == nil {
+			break
+		}
+		g.Log().Warning(ctx, "Failed to get pending email tasks (attempt", i+1, "):", err)
+		time.Sleep(time.Duration(i+1) * time.Second)
+	}
 
 	if err != nil {
 		g.Log().Error(ctx, "Failed to get pending email tasks: %v", err)

@@ -35,9 +35,17 @@ func InitRedis() (err error) {
 
 	// Initialize Redis configuration
 	gredis.SetConfig(&gredis.Config{
-		Address: address,
-		Db:      db,
-		Pass:    passwd,
+		Address:         address,
+		Db:              db,
+		Pass:            passwd,
+		DialTimeout:     5 * time.Second,
+		ReadTimeout:     5 * time.Second,
+		WriteTimeout:    5 * time.Second,
+		WaitTimeout:     5 * time.Second,
+		IdleTimeout:     5 * time.Minute,
+		MaxConnLifetime: 30 * time.Minute,
+		MinIdle:         5,
+		MaxActive:       20,
 	})
 
 	// Testing redis connection until it successful

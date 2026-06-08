@@ -150,25 +150,31 @@ func (p *WorkerPool) processMail(ctx context.Context, log ApiMailLog) {
 
 // Queue processing with distributed lock
 func ProcessApiMailQueueWithLock(ctx context.Context) {
-	// Attempt to acquire the distributed lock
-	err := g.Redis().SetEX(ctx, LockKey, "1", LockTimeout)
-	if err != nil {
-		g.Log().Error(ctx, "Failed to acquire lock:", err)
+	// Use SETNX so only one instance processes the queue at a time.
+	// Retry up to 3 times on transient Redis errors (e.g. brief DNS hiccup).
+	var locked bool
+	var lockErr error
+	for i := 0; i < 3; i++ {
+		locked, lockErr = g.Redis().SetNX(ctx, LockKey, "1")
+		if lockErr == nil {
+			break
+		}
+		g.Log().Warning(ctx, "Failed to acquire mail queue lock (attempt", i+1, "):", lockErr)
+		time.Sleep(time.Duration(i+1) * 500 * time.Millisecond)
+	}
+	if lockErr != nil {
+		g.Log().Error(ctx, "Failed to acquire lock after retries:", lockErr)
 		return
 	}
-	//if !locked {
-	//	g.Log().Warning(ctx, "Another instance is processing the mail queue")
-	//	return
-	//}
+	if !locked {
+		// Another instance is already processing
+		return
+	}
 
-	// // Set expiration time
-	// g.Redis().Expire(ctx, LockKey, int64(LockTimeout))
+	// Set expiration so the lock auto-releases if the process crashes
+	g.Redis().Expire(ctx, LockKey, int64(LockTimeout))
 
-	// defer func() {
-	// 	g.Redis().Del(ctx, LockKey)
-	// }()
-
-	// Start the goroutine for lease renewal
+	// Renew the lock TTL every 60s while processing
 	stopRenew := make(chan struct{})
 	go func() {
 		ticker := time.NewTicker(60 * time.Second)
@@ -176,7 +182,6 @@ func ProcessApiMailQueueWithLock(ctx context.Context) {
 		for {
 			select {
 			case <-ticker.C:
-				// Renewal lock
 				g.Redis().Expire(ctx, LockKey, int64(LockTimeout))
 			case <-stopRenew:
 				return
