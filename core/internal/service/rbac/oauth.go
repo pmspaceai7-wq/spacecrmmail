@@ -219,7 +219,7 @@ func (s *oauthService) FindOrCreateAccount(ctx context.Context, provider, provid
 	err := g.DB().Model("account_oauth").
 		Where("provider = ? AND provider_uid = ?", provider, providerUid).
 		Scan(&oauthRow)
-	if err != nil {
+	if err != nil && err.Error() != "sql: no rows in result set" {
 		return nil, fmt.Errorf("oauth lookup failed: %w", err)
 	}
 	if oauthRow.AccountId != 0 {
@@ -230,7 +230,7 @@ func (s *oauthService) FindOrCreateAccount(ctx context.Context, provider, provid
 	if email != "" {
 		var account model.Account
 		err = g.DB().Model("account").Where("email = ?", email).Scan(&account)
-		if err != nil {
+		if err != nil && err.Error() != "sql: no rows in result set" {
 			return nil, fmt.Errorf("email lookup failed: %w", err)
 		}
 		if account.AccountId != 0 {
