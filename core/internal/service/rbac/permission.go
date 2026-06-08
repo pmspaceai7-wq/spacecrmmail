@@ -56,7 +56,7 @@ func (s *permissionService) GetAll(ctx context.Context) ([]model.Permission, err
 // GetById gets permission details by ID
 func (s *permissionService) GetById(ctx context.Context, permissionId int64) (*model.Permission, error) {
 	var permission model.Permission
-	err := g.DB().Model("permission").Where("id = ?", permissionId).Scan(&permission)
+	err := g.DB().Model("permission").Where("permission_id = ?", permissionId).Scan(&permission)
 	if err != nil {
 		return nil, err
 	}
@@ -97,20 +97,20 @@ func (s *permissionService) Update(ctx context.Context, permissionId int64, name
 		"resource":    resource,
 		"status":      status,
 		"update_time": time.Now(),
-	}).Where("id = ?", permissionId).Update()
+	}).Where("permission_id = ?", permissionId).Update()
 	return err
 }
 
 // Delete deletes a permission
 func (s *permissionService) Delete(ctx context.Context, permissionId int64) error {
-	_, err := g.DB().Model("permission").Where("id = ?", permissionId).Delete()
+	_, err := g.DB().Model("permission").Where("permission_id = ?", permissionId).Delete()
 	return err
 }
 
 // Check checks permission for an account
 func (s *permissionService) Check(ctx context.Context, accountId int64, module, action, resource string) (bool, error) {
 	count, err := g.DB().Model("permission").
-		LeftJoin("role_permission", "permission.id=role_permission.permission_id").
+		LeftJoin("role_permission", "permission.permission_id=role_permission.permission_id").
 		LeftJoin("account_role", "role_permission.role_id=account_role.role_id").
 		Where("account_role.account_id = ?", accountId).
 		Where("permission.module = ?", module).

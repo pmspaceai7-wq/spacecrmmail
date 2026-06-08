@@ -64,7 +64,9 @@ const handleGoIssues = () => {
 	window.open('https://github.com/aaPanel/BillionMail/issues')
 }
 
-const langOptions = ref<DropdownOption[]>([])
+const langOptions = computed<DropdownOption[]>(() =>
+	langList.value.map(item => ({ label: item.cn, key: item.name }))
+)
 
 const userOptions = ref<DropdownOption[]>([
 	{
@@ -90,18 +92,6 @@ const handleUserAction = (key: string) => {
 	}
 }
 
-const getLangOptions = async () => {
-	langOptions.value = langList.value.map(item => {
-		return {
-			label: item.cn,
-			key: item.name,
-		}
-	})
-}
-
-onMounted(() => {
-	getLangOptions()
-})
 </script>
 
 <style lang="scss" scoped>

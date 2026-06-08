@@ -100,7 +100,7 @@
 <script lang="ts" setup>
 import { useUserStore } from '@/store'
 import { isObject } from '@/utils'
-import { getValidateCode, login, oauthInitiate, getCurrentUser } from '@/api/modules/user'
+import { getValidateCode, login, oauthInitiate } from '@/api/modules/user'
 
 const { t } = useI18n()
 
@@ -168,10 +168,7 @@ interface LoginResponse {
 	token: string
 	refresh_token: string
 	ttl: number
-}
-
-interface CurrentUserResponse {
-	roles: string[]
+	roles?: string[]
 }
 
 const handleLogin = async () => {
@@ -184,17 +181,8 @@ const handleLogin = async () => {
 				token: res.token,
 				refresh_token: res.refresh_token,
 				ttl: res.ttl,
+				roles: res.roles ?? [],
 			})
-			// Fetch roles so sidebar filtering works immediately
-			const userRes = await getCurrentUser()
-			if (isObject<CurrentUserResponse>(userRes)) {
-				userStore.setLoginInfo({
-					token: res.token,
-					refresh_token: res.refresh_token,
-					ttl: res.ttl,
-					roles: userRes.roles,
-				})
-			}
 			setTimeout(() => {
 				router.push('/')
 			}, 1000)

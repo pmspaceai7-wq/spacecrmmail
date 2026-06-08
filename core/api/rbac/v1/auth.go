@@ -18,9 +18,10 @@ type LoginReq struct {
 type LoginRes struct {
 	api_v1.StandardRes
 	Data struct {
-		Token        string `json:"token" dc:"JWT token"`
-		RefreshToken string `json:"refreshToken" dc:"Refresh token"`
-		TTL          int64  `json:"ttl" dc:"Token lifetime (in seconds)"`
+		Token        string   `json:"token" dc:"JWT token"`
+		RefreshToken string   `json:"refreshToken" dc:"Refresh token"`
+		TTL          int64    `json:"ttl" dc:"Token lifetime (in seconds)"`
+		Roles        []string `json:"roles" dc:"User roles"`
 		AccountInfo  struct {
 			Id       int64  `json:"id" dc:"Account ID"`
 			Username string `json:"username" dc:"Username"`

@@ -9,8 +9,6 @@
 
 <script lang="ts" setup>
 import { useUserStore } from '@/store'
-import { getCurrentUser } from '@/api/modules/user'
-import { isObject } from '@/utils'
 
 const route = useRoute()
 const router = useRouter()
@@ -19,12 +17,8 @@ const userStore = useUserStore()
 const loading = ref(true)
 const message = ref('Authenticating...')
 
-interface CurrentUserResponse {
-	roles: string[]
-}
-
 onMounted(async () => {
-	const { token, refreshToken, ttl, error } = route.query as Record<string, string>
+	const { token, refreshToken, ttl, roles, error } = route.query as Record<string, string>
 
 	if (error) {
 		loading.value = false
@@ -42,27 +36,12 @@ onMounted(async () => {
 	}
 
 	if (token && refreshToken && ttl) {
-		// Store token first so getCurrentUser request is authenticated
 		userStore.setLoginInfo({
 			token,
 			refresh_token: refreshToken,
 			ttl: Number(ttl),
+			roles: roles ? roles.split(',').filter(Boolean) : [],
 		})
-
-		// Fetch roles so sidebar filtering works immediately
-		try {
-			const userRes = await getCurrentUser()
-			if (isObject<CurrentUserResponse>(userRes)) {
-				userStore.setLoginInfo({
-					token,
-					refresh_token: refreshToken,
-					ttl: Number(ttl),
-					roles: userRes.roles,
-				})
-			}
-		} catch {
-			// roles default to [] — non-admin view is safe fallback
-		}
 
 		message.value = 'Login successful! Redirecting...'
 		loading.value = false

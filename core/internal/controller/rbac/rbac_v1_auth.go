@@ -7,10 +7,12 @@ import (
 	service "billionmail-core/internal/service/rbac"
 	"context"
 	"fmt"
+	"strings"
+	"time"
+
 	"github.com/gogf/gf/util/gconv"
 	"github.com/gogf/gf/v2/errors/gerror"
 	"github.com/gogf/gf/v2/frame/g"
-	"time"
 )
 
 // Login handles user login
@@ -119,6 +121,7 @@ func (c *ControllerV1) Login(ctx context.Context, req *v1.LoginReq) (res *v1.Log
 	res.Data.Token = token
 	res.Data.RefreshToken = refreshToken
 	res.Data.TTL = gconv.Int64(service.JWT().AccessExpiry.Seconds())
+	res.Data.Roles = roleNames
 
 	// Set account basic information
 	res.Data.AccountInfo.Id = account.AccountId
@@ -367,10 +370,10 @@ func (c *ControllerV1) OAuthCallback(ctx context.Context, req *v1.OAuthCallbackR
 
 	ttl := gconv.Int64(service.JWT().AccessExpiry.Seconds())
 
-	// Redirect to frontend callback page with tokens in query params
+	// Redirect to frontend callback page with tokens and roles in query params
 	r.Response.RedirectTo(fmt.Sprintf(
-		"/oauth/callback?token=%s&refreshToken=%s&ttl=%d",
-		token, refreshToken, ttl,
+		"/oauth/callback?token=%s&refreshToken=%s&ttl=%d&roles=%s",
+		token, refreshToken, ttl, strings.Join(roleNames, ","),
 	))
 	return
 }
@@ -434,8 +437,8 @@ func (c *ControllerV1) OAuthCallbackMicrosoft(ctx context.Context, req *v1.OAuth
 
 	ttl := gconv.Int64(service.JWT().AccessExpiry.Seconds())
 	r.Response.RedirectTo(fmt.Sprintf(
-		"/oauth/callback?token=%s&refreshToken=%s&ttl=%d",
-		token, refreshToken, ttl,
+		"/oauth/callback?token=%s&refreshToken=%s&ttl=%d&roles=%s",
+		token, refreshToken, ttl, strings.Join(roleNames, ","),
 	))
 	return
 }
