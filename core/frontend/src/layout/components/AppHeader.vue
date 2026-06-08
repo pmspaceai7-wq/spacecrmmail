@@ -96,7 +96,7 @@ const handleUserAction = (key: string) => {
 
 <style lang="scss" scoped>
 .n-layout-header {
-	position: absolute;
+	position: sticky;
 	top: 0;
 	left: 0;
 	right: 0;
