@@ -74,7 +74,8 @@
 	},
 	"layout": {
 		"header": {
-			"submit": "Submit a Request"
+			"submit": "Submit a Request",
+			"language": "Lang"
 		},
 		"instances": {
 			"title": "Instances",
@@ -90,6 +91,7 @@
 			"invalidUrl": "Invalid URL"
 		},
 		"menu": {
+			"account": "Account",
 			"overview": "Overview",
 			"market": "Campaign",
 			"task": "Task",

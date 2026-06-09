@@ -74,7 +74,8 @@
 	},
 	"layout": {
 		"header": {
-			"submit": "提交需求"
+			"submit": "提交需求",
+			"language": "语言"
 		},
 		"instances": {
 			"title": "实例",
@@ -90,6 +91,7 @@
 			"invalidUrl": "无效的URL"
 		},
 		"menu": {
+			"account": "账户",
 			"overview": "概览",
 			"market": "邮件营销",
 			"task": "任务",
