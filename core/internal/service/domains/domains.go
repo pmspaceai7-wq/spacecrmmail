@@ -378,6 +378,10 @@ func Get(ctx context.Context, keyword string, page, pageSize int) ([]v1.Domain, 
 func All(ctx context.Context) ([]v1.Domain, error) {
 	m := g.DB().Model("domain")
 
+	if !rbac.IsAdminAccount(ctx) {
+		m = m.Where("account_id = ?", rbac.GetCurrentAccountId(ctx))
+	}
+
 	var domains []v1.Domain
 	err := m.Scan(&domains)
 

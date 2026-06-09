@@ -698,7 +698,7 @@ func UpdateTaskJoinMailstat(ctx context.Context) {
 func getSingleTaskStats(ctx context.Context, taskId int64) map[string]interface{} {
 
 	overview := maillog_stat.NewOverview()
-	stats := overview.OverviewDashboard(taskId, "", 0, 0)
+	stats := overview.OverviewDashboard(ctx, taskId, "", 0, 0)
 
 	if stats == nil {
 		g.Log().Errorf(ctx, "getSingleTaskStats: OverviewDashboard returned nil for task %d", taskId)

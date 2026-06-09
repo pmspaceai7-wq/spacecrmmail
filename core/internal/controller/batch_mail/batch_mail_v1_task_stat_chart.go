@@ -31,7 +31,7 @@ func (c *ControllerV1) TaskStatChart(ctx context.Context, req *v1.TaskStatChartR
 
 	// reuse the maillog_stat service to get the overview
 	overview := maillog_stat.NewOverview()
-	overviewMap := overview.Overview(req.TaskId, req.Domain, req.StartTime, req.EndTime)
+	overviewMap := overview.Overview(ctx, req.TaskId, req.Domain, req.StartTime, req.EndTime)
 
 	err = gconv.Struct(overviewMap, &res.Data)
 

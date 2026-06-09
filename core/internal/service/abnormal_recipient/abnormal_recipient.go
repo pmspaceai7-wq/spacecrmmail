@@ -228,7 +228,7 @@ func AbnormalRecipientAutoStat(ctx context.Context) {
 	now := time.Now().Unix()
 
 	overview := maillog_stat.NewOverview()
-	failedList := overview.FailedListBounced(0, "", lastTime, now)
+	failedList := overview.FailedListBounced(ctx, 0, "", lastTime, now)
 
 
 	recipientDetailsMap := make(map[string]*RecipientDetail)

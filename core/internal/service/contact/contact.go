@@ -44,6 +44,10 @@ func GetAllGroups(ctx context.Context, keyword string) ([]*v1.ContactGroup, erro
 		Fields("id, name, description, create_time, update_time").
 		Order("create_time desc")
 
+	if !rbac.IsAdminAccount(ctx) {
+		model = model.Where("account_id = ?", rbac.GetCurrentAccountId(ctx))
+	}
+
 	// Add keyword search (group name or description)
 	if keyword != "" {
 		model = model.WhereLike("name", "%"+keyword+"%").
@@ -187,6 +191,10 @@ func ContactsGroupWithPage(ctx context.Context, page, pageSize int, keyword stri
 
 	model := g.DB().Model("bm_contact_groups").Ctx(ctx).Safe()
 
+	if !rbac.IsAdminAccount(ctx) {
+		model = model.Where("account_id = ?", rbac.GetCurrentAccountId(ctx))
+	}
+
 	if keyword != "" {
 		model = model.WhereLike("name", "%"+keyword+"%").
 			WhereOrLike("description", "%"+keyword+"%")
@@ -208,6 +216,12 @@ func ContactsGroupWithPage(ctx context.Context, page, pageSize int, keyword stri
 
 func GetContactsWithPage(ctx context.Context, page, pageSize int, groupId int, keyword string, status int) (total int, list []*entity.Contact, err error) {
 	model := g.DB().Model("bm_contacts").Safe()
+
+	// Scope to account's groups for non-admins
+	if !rbac.IsAdminAccount(ctx) {
+		accountId := rbac.GetCurrentAccountId(ctx)
+		model = model.WhereIn("group_id", g.DB().Model("bm_contact_groups").Fields("id").Where("account_id = ?", accountId))
+	}
 
 	// Add query conditions
 	if groupId > 0 {

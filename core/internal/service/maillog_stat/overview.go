@@ -4,6 +4,7 @@ import (
 	"billionmail-core/internal/consts"
 	docker "billionmail-core/internal/service/dockerapi"
 	"billionmail-core/internal/service/public"
+	rbac "billionmail-core/internal/service/rbac"
 	"context"
 	"fmt"
 	"sort"
@@ -43,7 +44,7 @@ func (o *Overview) filterAndPrepareTimeSection(startTime, endTime int64) (int64,
 }
 
 // buildBaseQuery build basic query
-func (o *Overview) buildBaseQuery(campaignID int64, domain string, startTime, endTime int64) *gdb.Model {
+func (o *Overview) buildBaseQuery(ctx context.Context, campaignID int64, domain string, startTime, endTime int64) *gdb.Model {
 	subQuery := "SELECT * FROM mailstat_send_mails WHERE true"
 
 	if startTime > 0 {
@@ -61,41 +62,36 @@ func (o *Overview) buildBaseQuery(campaignID int64, domain string, startTime, en
 	if campaignID > 0 {
 		query.InnerJoin("mailstat_message_ids mi", "sm.postfix_message_id=mi.postfix_message_id")
 		query.InnerJoin(fmt.Sprintf("(SELECT message_id FROM recipient_info WHERE task_id = %d) r", campaignID), "mi.message_id=r.message_id")
-		// query.Where("r.task_id = ?", campaignID)
 	}
 
 	if domain != "" {
 		query.Where("s.sender LIKE ?", "%@"+domain)
+	} else if accountId := rbac.GetCurrentAccountId(ctx); accountId > 0 && !rbac.IsAdminAccount(ctx) {
+		// Non-admin HTTP request with no specific domain: restrict to their own domains
+		query.WhereIn("SUBSTRING(s.sender FROM POSITION('@' IN s.sender)+1)",
+			g.DB().Model("domain").Fields("domain").Where("account_id = ?", accountId))
 	}
-
-	//if startTime > 0 {
-	//	query.Where("sm.log_time_millis > ?", startTime*1000-1)
-	//}
-	//
-	//if endTime > 0 {
-	//	query.Where("sm.log_time_millis < ?", endTime*1000+1)
-	//}
 
 	return query
 }
 
 // Overview the maillog
-func (o *Overview) Overview(campaignID int64, domain string, startTime, endTime int64) map[string]interface{} {
+func (o *Overview) Overview(ctx context.Context, campaignID int64, domain string, startTime, endTime int64) map[string]interface{} {
 	startTime, endTime = o.filterAndPrepareTimeSection(startTime, endTime)
 
 	return map[string]interface{}{
-		"dashboard":         o.overviewDashboard(campaignID, domain, startTime, endTime),
-		"mail_providers":    o.overviewProviders(campaignID, domain, startTime, endTime),
-		"send_mail_chart":   o.chartSendMail(campaignID, domain, startTime, endTime),
-		"bounce_rate_chart": o.chartBounceRate(campaignID, domain, startTime, endTime),
-		"open_rate_chart":   o.chartOpenRate(campaignID, domain, startTime, endTime),
-		"click_rate_chart":  o.chartClickRate(campaignID, domain, startTime, endTime),
+		"dashboard":         o.overviewDashboard(ctx, campaignID, domain, startTime, endTime),
+		"mail_providers":    o.overviewProviders(ctx, campaignID, domain, startTime, endTime),
+		"send_mail_chart":   o.chartSendMail(ctx, campaignID, domain, startTime, endTime),
+		"bounce_rate_chart": o.chartBounceRate(ctx, campaignID, domain, startTime, endTime),
+		"open_rate_chart":   o.chartOpenRate(ctx, campaignID, domain, startTime, endTime),
+		"click_rate_chart":  o.chartClickRate(ctx, campaignID, domain, startTime, endTime),
 	}
 }
 
 // overviewDashboard dashboard data
-func (o *Overview) overviewDashboard(campaignID int64, domain string, startTime, endTime int64) map[string]interface{} {
-	query := o.buildBaseQuery(campaignID, domain, startTime, endTime)
+func (o *Overview) overviewDashboard(ctx context.Context, campaignID int64, domain string, startTime, endTime int64) map[string]interface{} {
+	query := o.buildBaseQuery(ctx, campaignID, domain, startTime, endTime)
 
 	query.LeftJoin(`LATERAL(
 	SELECT id
@@ -165,8 +161,8 @@ func (o *Overview) overviewDashboard(campaignID int64, domain string, startTime,
 }
 
 // OverviewDashboard dashboard data
-func (o *Overview) OverviewDashboard(campaignID int64, domain string, startTime, endTime int64) map[string]interface{} {
-	aggregate := o.overviewDashboard(campaignID, domain, startTime, endTime)
+func (o *Overview) OverviewDashboard(ctx context.Context, campaignID int64, domain string, startTime, endTime int64) map[string]interface{} {
+	aggregate := o.overviewDashboard(ctx, campaignID, domain, startTime, endTime)
 	return aggregate
 }
 
@@ -216,10 +212,10 @@ func (o *Overview) getPostfixDeferredQueueCount(ctx context.Context) (int, error
 }
 
 // overviewProviders statistic mail provider
-func (o *Overview) overviewProviders(campaignID int64, domain string, startTime, endTime int64) []map[string]interface{} {
+func (o *Overview) overviewProviders(ctx context.Context, campaignID int64, domain string, startTime, endTime int64) []map[string]interface{} {
 	startTime, endTime = o.filterAndPrepareTimeSection(startTime, endTime)
 
-	query := o.buildBaseQuery(campaignID, domain, startTime, endTime)
+	query := o.buildBaseQuery(ctx, campaignID, domain, startTime, endTime)
 
 	query.LeftJoin(`LATERAL(
 	SELECT id
@@ -423,10 +419,10 @@ func (o *Overview) fillChartDataMonthly(data []map[string]interface{}, fillItem 
 }
 
 // sendMailDashboard dashboard data for send mail
-func (o *Overview) sendMailDashboard(campaignID int64, domain string, startTime, endTime int64) map[string]interface{} {
+func (o *Overview) sendMailDashboard(ctx context.Context, campaignID int64, domain string, startTime, endTime int64) map[string]interface{} {
 	startTime, endTime = o.filterAndPrepareTimeSection(startTime, endTime)
 
-	query := o.buildBaseQuery(campaignID, domain, startTime, endTime)
+	query := o.buildBaseQuery(ctx, campaignID, domain, startTime, endTime)
 
 	query.Fields("count(*) as sends")
 	query.Fields("coalesce(sum(case when status='sent' and dsn like '2.%' then 1 else 0 end), 0) as delivered")
@@ -477,10 +473,10 @@ func (o *Overview) prepareChartData(startTime, endTime int64) (string, string) {
 	return columnType, xAxisField
 }
 
-func (o *Overview) chartSendMail(campaignID int64, domain string, startTime, endTime int64) map[string]interface{} {
+func (o *Overview) chartSendMail(ctx context.Context, campaignID int64, domain string, startTime, endTime int64) map[string]interface{} {
 	startTime, endTime = o.filterAndPrepareTimeSection(startTime, endTime)
 
-	query := o.buildBaseQuery(campaignID, domain, startTime, endTime)
+	query := o.buildBaseQuery(ctx, campaignID, domain, startTime, endTime)
 
 	columnType, xAxisField := o.prepareChartData(startTime, endTime)
 
@@ -511,15 +507,15 @@ func (o *Overview) chartSendMail(campaignID int64, domain string, startTime, end
 
 	return map[string]interface{}{
 		"column_type": columnType,
-		"dashboard":   o.sendMailDashboard(campaignID, domain, startTime, endTime),
+		"dashboard":   o.sendMailDashboard(ctx, campaignID, domain, startTime, endTime),
 		"data":        o.fillChartData(results, fillItem, columnType, "x", startTime, endTime),
 	}
 }
 
-func (o *Overview) chartBounceRate(campaignID int64, domain string, startTime, endTime int64) map[string]interface{} {
+func (o *Overview) chartBounceRate(ctx context.Context, campaignID int64, domain string, startTime, endTime int64) map[string]interface{} {
 	startTime, endTime = o.filterAndPrepareTimeSection(startTime, endTime)
 
-	query := o.buildBaseQuery(campaignID, domain, startTime, endTime)
+	query := o.buildBaseQuery(ctx, campaignID, domain, startTime, endTime)
 
 	columnType, xAxisField := o.prepareChartData(startTime, endTime)
 
@@ -550,10 +546,10 @@ func (o *Overview) chartBounceRate(campaignID int64, domain string, startTime, e
 	}
 }
 
-func (o *Overview) chartOpenRate(campaignID int64, domain string, startTime, endTime int64) map[string]interface{} {
+func (o *Overview) chartOpenRate(ctx context.Context, campaignID int64, domain string, startTime, endTime int64) map[string]interface{} {
 	startTime, endTime = o.filterAndPrepareTimeSection(startTime, endTime)
 
-	query := o.buildBaseQuery(campaignID, domain, startTime, endTime)
+	query := o.buildBaseQuery(ctx, campaignID, domain, startTime, endTime)
 
 	columnType, xAxisField := o.prepareChartData(startTime, endTime)
 
@@ -590,10 +586,10 @@ func (o *Overview) chartOpenRate(campaignID int64, domain string, startTime, end
 	}
 }
 
-func (o *Overview) chartClickRate(campaignID int64, domain string, startTime, endTime int64) map[string]interface{} {
+func (o *Overview) chartClickRate(ctx context.Context, campaignID int64, domain string, startTime, endTime int64) map[string]interface{} {
 	startTime, endTime = o.filterAndPrepareTimeSection(startTime, endTime)
 
-	query := o.buildBaseQuery(campaignID, domain, startTime, endTime)
+	query := o.buildBaseQuery(ctx, campaignID, domain, startTime, endTime)
 
 	columnType, xAxisField := o.prepareChartData(startTime, endTime)
 
@@ -638,10 +634,10 @@ func (o *Overview) chartClickRate(campaignID int64, domain string, startTime, en
 }
 
 // FailedList failed list
-func (o *Overview) FailedList(campaignID int64, domain string, startTime, endTime int64) []map[string]interface{} {
+func (o *Overview) FailedList(ctx context.Context, campaignID int64, domain string, startTime, endTime int64) []map[string]interface{} {
 	startTime, endTime = o.filterAndPrepareTimeSection(startTime, endTime)
 
-	query := o.buildBaseQuery(campaignID, domain, startTime, endTime)
+	query := o.buildBaseQuery(ctx, campaignID, domain, startTime, endTime)
 
 	query.LeftJoin(`LATERAL(
 	SELECT id, dsn, delay, delays, relay, description
@@ -681,11 +677,11 @@ func (o *Overview) FailedList(campaignID int64, domain string, startTime, endTim
 }
 
 // description FailedListBounced
-func (o *Overview) FailedListBounced(campaignID int64, domain string, startTime, endTime int64) []map[string]interface{} {
+func (o *Overview) FailedListBounced(ctx context.Context, campaignID int64, domain string, startTime, endTime int64) []map[string]interface{} {
 
 	startTime, endTime = o.filterAndPrepareTimeSection(startTime, endTime)
 
-	query := o.buildBaseQuery(campaignID, domain, startTime, endTime)
+	query := o.buildBaseQuery(ctx, campaignID, domain, startTime, endTime)
 
 	query.Fields("sm.recipient")
 	query.Fields("sm.status")

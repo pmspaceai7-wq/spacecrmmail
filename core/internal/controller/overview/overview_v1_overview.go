@@ -25,7 +25,7 @@ func (c *ControllerV1) Overview(ctx context.Context, req *v1.OverviewReq) (res *
 	}
 
 	overview := maillog_stat.NewOverview()
-	overviewMap := overview.Overview(req.CampaignId, req.Domain, req.StartTime, req.EndTime)
+	overviewMap := overview.Overview(ctx, req.CampaignId, req.Domain, req.StartTime, req.EndTime)
 
 	err = gconv.Struct(overviewMap, &res.Data)
 

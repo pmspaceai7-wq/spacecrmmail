@@ -24,7 +24,7 @@ func (c *ControllerV1) FailedList(ctx context.Context, req *v1.FailedListReq) (r
 	}
 
 	overview := maillog_stat.NewOverview()
-	failedList := overview.FailedList(req.CampaignId, req.Domain, req.StartTime, req.EndTime)
+	failedList := overview.FailedList(ctx, req.CampaignId, req.Domain, req.StartTime, req.EndTime)
 
 	err = gconv.Struct(failedList, &res.Data)
 
