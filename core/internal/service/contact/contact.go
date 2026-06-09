@@ -44,10 +44,6 @@ func GetAllGroups(ctx context.Context, keyword string) ([]*v1.ContactGroup, erro
 		Fields("id, name, description, create_time, update_time").
 		Order("create_time desc")
 
-	if !rbac.IsAdminAccount(ctx) {
-		model = model.Where("account_id = ?", rbac.GetCurrentAccountId(ctx))
-	}
-
 	// Add keyword search (group name or description)
 	if keyword != "" {
 		model = model.WhereLike("name", "%"+keyword+"%").
