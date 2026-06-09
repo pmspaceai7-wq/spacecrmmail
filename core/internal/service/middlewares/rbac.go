@@ -149,13 +149,14 @@ func (m *RBACMiddleware) PermissionCheck(r *ghttp.Request) {
 		return
 	}
 
-	// Any authenticated user with a valid role can access non-admin-only modules
-	if len(roleNames) > 0 {
+	// Any authenticated user (with or without roles) can access non-admin-only modules.
+	// Accounts created before viewer role existed may have no roles but are still valid users.
+	if !adminOnlyModules[module] {
 		r.Middleware.Next()
 		return
 	}
 
-	// No roles — deny
+	// Admin-only module, non-admin user — deny
 	r.Response.WriteJson(g.Map{
 		"code": 403,
 		"msg":  "Insufficient permissions",
