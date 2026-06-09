@@ -19,9 +19,8 @@ func newAccountService() *accountService {
 // GetList gets account list with pagination
 func (s *accountService) GetList(ctx context.Context, page, pageSize int, username, email string, status int) ([]model.Account, int, error) {
 	var accounts []model.Account
-	var total int
 
-	query := g.DB().Model("account")
+	query := g.DB().Model("account").Ctx(ctx).Safe()
 	if username != "" {
 		query = query.Where("username LIKE ?", "%"+username+"%")
 	}
@@ -32,14 +31,11 @@ func (s *accountService) GetList(ctx context.Context, page, pageSize int, userna
 		query = query.Where("status = ?", status)
 	}
 
-	// Get total count
-	count, err := query.Count()
+	total, err := query.Count()
 	if err != nil {
 		return nil, 0, err
 	}
-	total = count
 
-	// Get paginated data
 	err = query.Page(page, pageSize).Scan(&accounts)
 	if err != nil {
 		return nil, 0, err

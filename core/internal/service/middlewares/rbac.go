@@ -4,7 +4,6 @@ import (
 	"billionmail-core/internal/model"
 	"billionmail-core/internal/service/public"
 	"context"
-	"fmt"
 	"strings"
 
 	"github.com/gogf/gf/v2/frame/g"
@@ -93,28 +92,28 @@ func (m *RBACMiddleware) PermissionCheck(r *ghttp.Request) {
 		return
 	}
 
-	// Extract account ID from context
-	accountIdVar := r.GetCtxVar("accountId")
-	if accountIdVar == nil {
+	// Extract account ID from context — nil means unauthenticated
+	if r.GetCtxVar("accountId") == nil {
 		r.Response.WriteJson(public.CodeMap[401])
 		r.Exit()
 		return
 	}
-	accountId := gconv.Int64(accountIdVar)
 
 	// Get roles from context — may be []model.Role, []string, or []interface{}
 	rolesVal := r.GetCtxVar("roles").Val()
 	isAdmin := false
+	roleNames := []string{}
 	switch rv := rolesVal.(type) {
 	case []model.Role:
 		for _, role := range rv {
+			roleNames = append(roleNames, role.RoleName)
 			if role.RoleName == "admin" {
 				isAdmin = true
-				break
 			}
 		}
 	default:
-		for _, s := range gconv.Strings(rv) {
+		roleNames = gconv.Strings(rv)
+		for _, s := range roleNames {
 			if s == "admin" {
 				isAdmin = true
 				break
@@ -126,13 +125,22 @@ func (m *RBACMiddleware) PermissionCheck(r *ghttp.Request) {
 		return
 	}
 
-	// Extract module, action, and resource from request path
-	module, action, resource := PathToRouteInfo(r.URL.Path)
+	// Modules that require admin role — non-admins are always denied
+	adminOnlyModules := map[string]bool{
+		"account":       true,
+		"role":          true,
+		"permission":    true,
+		"relay":         true,
+		"settings":      true,
+		"operation_log": true,
+		"mail_services": true,
+		"dockerapi":     true,
+	}
 
-	// Default-deny: if we couldn't determine the module, action, or resource, deny access
-	if module == "" || action == "" || resource == "" {
-		g.Log().Warning(context.Background(),
-			fmt.Sprintf("Could not determine permission components for path: %s, denying access", r.URL.Path))
+	// Extract module from path to determine if admin-only
+	module, _, _ := PathToRouteInfo(r.URL.Path)
+
+	if adminOnlyModules[module] {
 		r.Response.WriteJson(g.Map{
 			"code": 403,
 			"msg":  "Insufficient permissions",
@@ -141,28 +149,18 @@ func (m *RBACMiddleware) PermissionCheck(r *ghttp.Request) {
 		return
 	}
 
-	// Check if user has the required permission
-	hasPermission, err := m.PermissionService.Check(r.GetCtx(), accountId, module, action, resource)
-	if err != nil {
-		g.Log().Error(r.GetCtx(), "Permission check error:", err)
-		r.Response.WriteJson(g.Map{
-			"code": 500,
-			"msg":  "Error checking permissions",
-		})
-		r.Exit()
+	// Any authenticated user with a valid role can access non-admin-only modules
+	if len(roleNames) > 0 {
+		r.Middleware.Next()
 		return
 	}
 
-	if !hasPermission {
-		r.Response.WriteJson(g.Map{
-			"code": 403,
-			"msg":  "Insufficient permissions",
-		})
-		r.Exit()
-		return
-	}
-
-	r.Middleware.Next()
+	// No roles — deny
+	r.Response.WriteJson(g.Map{
+		"code": 403,
+		"msg":  "Insufficient permissions",
+	})
+	r.Exit()
 }
 
 // HasPermission checks if the current user has a specific permission
