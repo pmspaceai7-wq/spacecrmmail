@@ -1,5 +1,5 @@
 <template>
-	<n-layout-header ref="headerRef" :style="{ top: `${top}px` }">
+	<n-layout-header>
 		<div class="header-left">
 			<n-button class="icon-btn" :bordered="false" @click="handleCollapse">
 				<i class="icon" :class="isCollapse ? 'i-mdi-menu-close' : 'i-mdi-menu-open'"></i>
@@ -11,22 +11,22 @@
 		</div>
 
 		<div class="header-right">
-			<n-button class="icon-btn" :bordered="false" @click="handleSetTheme">
-				<i class="icon" :class="theme === 'light' ? 'i-ri-sun-line' : 'i-ri-moon-line'"></i>
+			<n-button text class="header-text-btn" @click="handleSetTheme">
+				{{ theme === 'light' ? '🌙' : '☀️' }}
 			</n-button>
 			<n-dropdown
 				v-if="langOptions.length > 0"
 				size="large"
 				:options="langOptions"
 				@select="handleLangAction">
-				<n-button class="icon-btn" :bordered="false">
-					<i class="icon i-mdi-earth text-20px"></i>
+				<n-button text class="header-text-btn">
+					🌐 {{ t('layout.header.language') || 'Lang' }}
 				</n-button>
 			</n-dropdown>
 			<InstanceSwitcher />
 			<n-dropdown size="large" :options="userOptions" @select="handleUserAction">
-				<n-button class="icon-btn" :bordered="false">
-					<i class="icon i-mdi-account-outline"></i>
+				<n-button text class="header-text-btn">
+					{{ username || t('layout.menu.account') || 'Account' }} ▾
 				</n-button>
 			</n-dropdown>
 		</div>
@@ -39,16 +39,10 @@ import { DropdownOption } from 'naive-ui'
 import { useUserStore, useGlobalStore, useThemeStore } from '@/store'
 import InstanceSwitcher from './InstanceSwitcher.vue'
 
-defineProps({
-	top: {
-		type: Number,
-		default: 0,
-	},
-})
-
 const { t } = useI18n()
 
 const userStore = useUserStore()
+const { username } = storeToRefs(userStore)
 
 const globalStore = useGlobalStore()
 const { isCollapse, langList } = storeToRefs(globalStore)
@@ -111,6 +105,7 @@ const handleUserAction = (key: string) => {
 	border-bottom: 1px solid var(--color-border-1);
 	box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
 	z-index: 1000;
+	flex-shrink: 0;
 }
 
 :root[theme-mode='dark'] .n-layout-header {
@@ -125,11 +120,17 @@ const handleUserAction = (key: string) => {
 	gap: 8px;
 }
 
-.header-item {
+.header-text-btn {
+	font-size: 13px;
+	font-weight: 500;
 	color: var(--color-text-1);
-	font-size: 14px;
-	text-align: center;
-	font-weight: 600;
+	padding: 0 8px;
+	height: 32px;
+	cursor: pointer;
+
+	&:hover {
+		color: var(--color-primary-1);
+	}
 }
 
 .icon-btn {

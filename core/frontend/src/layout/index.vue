@@ -1,8 +1,8 @@
 <template>
 	<n-layout class="w-full h-full" has-sider>
 		<sidebar></sidebar>
-		<n-layout @scroll="handleScroll">
-			<app-header :top="scrollTop"></app-header>
+		<n-layout class="content-layout">
+			<app-header></app-header>
 			<app-main></app-main>
 		</n-layout>
 	</n-layout>
@@ -10,10 +10,13 @@
 
 <script lang="ts" setup>
 import { Sidebar, AppHeader, AppMain } from './components'
-
-const scrollTop = ref(0)
-
-const handleScroll = (e: Event) => {
-	scrollTop.value = (e.target as HTMLElement).scrollTop || 0
-}
 </script>
+
+<style lang="scss" scoped>
+.content-layout {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	overflow: hidden;
+}
+</style>
