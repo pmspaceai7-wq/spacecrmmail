@@ -249,11 +249,7 @@ func (c *ControllerV1) AccountPassword(ctx context.Context, req *v1.AccountPassw
 func (c *ControllerV1) AccountDelete(ctx context.Context, req *v1.AccountDeleteReq) (res *v1.AccountDeleteRes, err error) {
 	res = &v1.AccountDeleteRes{}
 
-	isAdmin, err := service.Account().IsAdmin(ctx, req.AccountId)
-	if err != nil {
-		err = gerror.New("Failed to check account roles")
-		return
-	}
+	isAdmin, _ := service.Account().IsAdmin(ctx, req.AccountId)
 
 	if isAdmin {
 		adminCount, countErr := service.Account().CountAdmins(ctx)
