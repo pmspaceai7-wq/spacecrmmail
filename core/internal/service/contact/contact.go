@@ -189,7 +189,7 @@ func ContactsGroupWithPage(ctx context.Context, page, pageSize int, keyword stri
 
 	keyword = strings.TrimSpace(keyword)
 
-	model := g.DB().Model("bm_contact_groups").Ctx(ctx)
+	model := g.DB().Model("bm_contact_groups").Ctx(ctx).Safe()
 
 	if keyword != "" {
 		model = model.WhereLike("name", "%"+keyword+"%").

@@ -192,7 +192,7 @@ func DeleteBatch(ctx context.Context, emails []string) (int64, error) {
 }
 
 func Get(ctx context.Context, domain, keyword string, page, pageSize int) ([]v1.Mailbox, int, error) {
-	m := g.DB().Model("mailbox").Order("create_time", "desc")
+	m := g.DB().Model("mailbox").Ctx(ctx).Safe().Order("create_time", "desc")
 
 	allowedDomains, isAdmin := accessibleDomains(ctx)
 	if !isAdmin {

@@ -217,7 +217,7 @@ func Delete(ctx context.Context, domainName string) error {
 }
 
 func Get(ctx context.Context, keyword string, page, pageSize int) ([]v1.Domain, int, error) {
-	m := g.DB().Model("domain").Order("create_time", "desc")
+	m := g.DB().Model("domain").Ctx(ctx).Safe().Order("create_time", "desc")
 
 	// Non-admins only see their own domains
 	if !isAdminCtx(ctx) {

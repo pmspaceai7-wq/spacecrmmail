@@ -143,10 +143,16 @@ const handleUserAction = (key: string) => {
 	--n-text-color-focus: var(--color-primary-1);
 	--n-ripple-color: none;
 	color: var(--color-text-1);
+	min-width: 42px;
+	min-height: 42px;
 
 	:deep(.icon),
 	:deep(i) {
 		color: var(--color-text-1);
+		font-size: 22px;
+		width: 22px;
+		height: 22px;
+		display: inline-flex;
 	}
 
 	&:hover :deep(.icon),
