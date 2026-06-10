@@ -30,10 +30,10 @@ const footerLinks = {
 };
 
 const socialLinks = [
-  { icon: Twitter, href: "#", label: "Twitter" },
-  { icon: Linkedin, href: "#", label: "LinkedIn" },
-  { icon: Github, href: "#", label: "GitHub" },
-  { icon: Mail, href: "#", label: "Email" },
+  { icon: Twitter, href: "https://twitter.com/spacecrm", label: "Twitter" },
+  { icon: Linkedin, href: "https://linkedin.com/company/spacecrm", label: "LinkedIn" },
+  { icon: Github, href: "https://github.com/spacecrm", label: "GitHub" },
+  { icon: Mail, href: "mailto:hello@spacecrm.net", label: "Email" },
 ];
 
 export default function Footer() {
@@ -98,24 +98,49 @@ export default function Footer() {
       {/* ── Bottom bar ── */}
       <div className="border-t border-gray-200">
         <div className="max-w-6xl mx-auto px-6 lg:px-12 py-5">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-xs font-mono text-gray-400">
-              © {new Date().getFullYear()} Space CRM. All rights reserved.
+          <div className="flex flex-col items-center gap-2">
+            <p className="text-xs font-mono text-gray-400 text-center">
+              © 2026 SPACECRM — Built with open-source software licensed under{" "}
+              <a
+                href="https://www.gnu.org/licenses/agpl-3.0.html"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline hover:text-gray-900 transition-colors"
+              >
+                AGPL v3
+              </a>
+              . Source code available at{" "}
+              <a
+                href="https://github.com/bibinprathap/spacecrm"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="underline hover:text-gray-900 transition-colors"
+              >
+                GitHub
+              </a>
+              .
             </p>
-            <div className="flex items-center gap-6">
-              {[
-                { label: "Privacy Policy", href: "/privacy" },
-                { label: "Terms of Service", href: "/terms" },
-                { label: "Cookie Settings", href: "/cookies" }
-              ].map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  className="text-xs font-mono text-gray-400 hover:text-gray-900 transition-colors duration-150"
-                >
-                  {link.label}
-                </Link>
-              ))}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4">
+              <Link
+                href="/privacy"
+                className="text-xs font-mono text-gray-400 hover:text-gray-900 transition-colors duration-150"
+              >
+                Privacy Policy
+              </Link>
+              <span className="hidden sm:inline text-xs font-mono text-gray-400">·</span>
+              <Link
+                href="/terms"
+                className="text-xs font-mono text-gray-400 hover:text-gray-900 transition-colors duration-150"
+              >
+                Terms of Service
+              </Link>
+              <span className="hidden sm:inline text-xs font-mono text-gray-400">·</span>
+              <Link
+                href="/cookies"
+                className="text-xs font-mono text-gray-400 hover:text-gray-900 transition-colors duration-150"
+              >
+                Cookie Settings
+              </Link>
             </div>
           </div>
         </div>
