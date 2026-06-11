@@ -60,21 +60,22 @@ func (c *ControllerV1) SendTestEmail(ctx context.Context, req *v1.SendTestEmailR
 	if err != nil && err != sql.ErrNoRows {
 		g.Log().Error(ctx, "Failed to get contact: %v", err)
 	}
+	engine := batch_mail.GetTemplateEngine()
+	var contactPtr *entity.Contact
 	if contact.Id != 0 {
-		engine := batch_mail.GetTemplateEngine()
-		content, err = engine.RenderEmailTemplate(ctx, content, &contact, nil, unsubscribeJumpURL)
-		if err != nil {
-			res.Code = 500
-			res.SetError(gerror.New(public.LangCtx(ctx, "failed to render email content: {}", err)))
-			return
-		}
-
-		subject, err = engine.RenderEmailTemplate(ctx, subject, &contact, nil, unsubscribeJumpURL)
-		if err != nil {
-			res.Code = 500
-			res.SetError(gerror.New(public.LangCtx(ctx, "failed to render email subject: {}", err)))
-			return
-		}
+		contactPtr = &contact
+	}
+	content, err = engine.RenderEmailTemplate(ctx, content, contactPtr, nil, unsubscribeJumpURL)
+	if err != nil {
+		res.Code = 500
+		res.SetError(gerror.New(public.LangCtx(ctx, "failed to render email content: {}", err)))
+		return
+	}
+	subject, err = engine.RenderEmailTemplate(ctx, subject, contactPtr, nil, unsubscribeJumpURL)
+	if err != nil {
+		res.Code = 500
+		res.SetError(gerror.New(public.LangCtx(ctx, "failed to render email subject: {}", err)))
+		return
 	}
 
 	message := mail_service.NewMessage(subject, content)
