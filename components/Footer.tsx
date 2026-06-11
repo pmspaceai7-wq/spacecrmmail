@@ -32,7 +32,7 @@ const footerLinks = {
 const socialLinks = [
   { icon: Twitter, href: "https://twitter.com/spacecrm", label: "Twitter" },
   { icon: Linkedin, href: "https://linkedin.com/company/spacecrm", label: "LinkedIn" },
-  { icon: Github, href: "https://github.com/spacecrm", label: "GitHub" },
+  { icon: Github, href: "https://github.com/pmspaceai7-wq/spacecrmmail", label: "GitHub" },
   { icon: Mail, href: "mailto:hello@spacecrm.net", label: "Email" },
 ];
 
@@ -111,7 +111,7 @@ export default function Footer() {
               </a>
               . Source code available at{" "}
               <a
-                href="https://github.com/bibinprathap/spacecrm"
+                href="https://github.com/pmspaceai7-wq/spacecrmmail"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="underline hover:text-gray-900 transition-colors"

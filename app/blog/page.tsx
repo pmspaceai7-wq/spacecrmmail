@@ -82,7 +82,7 @@ export default function BlogPage() {
                 <em className="not-italic text-gray-300">worth reading.</em>
               </h1>
               <p className="text-base text-gray-500 max-w-md leading-relaxed">
-                Tactical articles on lifecycle messaging, outreach automation, and funnel optimization across every major channel.
+                Practical guides on email deliverability, cold outreach, LinkedIn automation, WhatsApp marketing, and transactional email infrastructure — for teams building with SpaceCRM.
               </p>
             </div>
             <div className="flex flex-col gap-3 shrink-0">
