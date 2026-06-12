@@ -257,9 +257,8 @@ export default async function BlogDetailsPage({ params }: BlogDetailsPageProps) 
               {relatedPosts.map((related, index) => (
                 <article
                   key={related.slug}
-                  className={`group flex flex-col hover:bg-gray-50 transition-colors duration-200 ${
-                    index !== 0 ? "sm:border-l border-gray-200" : ""
-                  }`}
+                  className={`group flex flex-col hover:bg-gray-50 transition-colors duration-200 ${index !== 0 ? "sm:border-l border-gray-200" : ""
+                    }`}
                 >
                   <Link href={`/blog/${related.slug}`} className="flex flex-col h-full">
                     {/* Image */}
