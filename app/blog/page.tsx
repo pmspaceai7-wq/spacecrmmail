@@ -94,6 +94,119 @@ export default function BlogPage() {
         </div>
       </section>
 
+      {/* ───── ONBOARDING GUIDE ───── */}
+      <section className="border-b border-gray-200">
+        <div className="max-w-6xl mx-auto px-6 lg:px-12 py-16">
+
+          <div className="flex items-baseline justify-between border-b border-gray-200 pb-4 mb-10">
+            <p className="text-xs font-mono tracking-[0.2em] uppercase text-gray-400">
+              Resources
+            </p>
+            <p className="text-xs font-mono text-gray-300">
+              01 guide
+            </p>
+          </div>
+
+          <div className="grid lg:grid-cols-[1fr_400px] gap-8 items-stretch">
+
+            {/* LEFT — PDF Preview */}
+            <div className="border border-gray-200 overflow-hidden">
+              
+              {/* Browser chrome bar */}
+              <div className="bg-gray-100 px-4 py-2.5 flex items-center gap-1.5 border-b border-gray-200">
+                <div className="w-2.5 h-2.5 rounded-full bg-red-400" />
+                <div className="w-2.5 h-2.5 rounded-full bg-yellow-400" />
+                <div className="w-2.5 h-2.5 rounded-full bg-green-400" />
+                <div className="flex-1 ml-3 bg-white border border-gray-200 rounded-full px-3 py-1 text-xs font-mono text-gray-400">
+                  spacecrm.net/pdfs/onboarding-guide.pdf
+                </div>
+              </div>
+
+              {/* PDF iframe */}
+              <iframe
+                src="/pdfs/spacecrm-onboarding-guide.pdf"
+                className="w-full h-[480px]"
+                title="SpaceCRM Onboarding Guide"
+              />
+            </div>
+
+            {/* RIGHT — Info Panel */}
+            <div className="border border-gray-200 p-8 lg:p-10 flex flex-col justify-between bg-white">
+
+              {/* Top block */}
+              <div>
+                <p className="text-xs font-mono tracking-[0.2em] uppercase text-gray-400 mb-3">
+                  Onboarding Guide
+                </p>
+                <h3 className="text-2xl font-black text-gray-900 leading-tight mb-4">
+                  Launch Checklist & Setup Steps
+                </h3>
+                <p className="text-sm text-gray-500 leading-relaxed mb-8">
+                  Everything you need to get SpaceCRM running for your team. Follow the setup steps, complete the launch checklist, and go live with confidence.
+                </p>
+
+                {/* What's inside */}
+                <p className="text-xs font-mono tracking-[0.2em] uppercase text-gray-400 mb-4">
+                  What&apos;s inside
+                </p>
+                <ul className="space-y-3">
+                  {[
+                    "Domain and mailbox setup checklist",
+                    "First campaign launch steps",
+                    "Team onboarding and permissions guide",
+                    "Recommended settings for deliverability",
+                  ].map((item) => (
+                    <li key={item} className="flex items-start gap-2.5">
+                      <span className="w-1.5 h-1.5 mt-1.5 bg-gray-900 rounded-full flex-shrink-0" />
+                      <span className="text-sm text-gray-600">{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              {/* Bottom block */}
+              <div className="mt-8 pt-8 border-t border-gray-200">
+
+                {/* Meta */}
+                <div className="flex items-center gap-6 mb-6">
+                  <span className="flex items-center gap-1.5 text-xs font-mono text-gray-400">
+                    PDF Document
+                  </span>
+                  <span className="flex items-center gap-1.5 text-xs font-mono text-gray-400">
+                    5 min read
+                  </span>
+                </div>
+
+                {/* Buttons */}
+                <div className="flex flex-col gap-3">
+                  <a
+                    href="/pdfs/spacecrm-onboarding-guide.pdf"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gray-900 text-white text-sm font-semibold tracking-wide hover:bg-gray-700 transition-colors duration-150 w-full"
+                  >
+                    Open in New Tab
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                  </a>
+                  <a
+                    href="/pdfs/spacecrm-onboarding-guide.pdf"
+                    download
+                    className="inline-flex items-center justify-center gap-2 px-6 py-3 border border-gray-200 text-gray-600 text-sm font-semibold tracking-wide hover:border-gray-900 hover:text-gray-900 transition-colors duration-150 w-full"
+                  >
+                    Download PDF
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── Featured Post ── */}
       {featuredPost && (
         <section className="border-b border-gray-200">
